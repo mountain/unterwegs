@@ -1,0 +1,10 @@
+flask
+
+redis
+typesense
+pyseaweed
+
+celery[redis]
+
+
+
