@@ -3,4 +3,4 @@ WORKDIR /worker
 COPY requirements.txt requirements.txt
 RUN pip3 install  -i https://pypi.douban.com/simple/ -r requirements.txt
 COPY . .
-CMD ["celery", "-A", "tasks", "worker", "-l", "INFO"]
+CMD ["celery", "-A", "unterwegs.celery", "worker", "-l", "INFO"]

@@ -1,7 +1,6 @@
 import os
-import logging
-import tasks as ts
 
+from celery import shared_task
 from celery.utils.log import get_task_logger
 from pyseaweed import WeedFS
 
@@ -10,7 +9,7 @@ logger = get_task_logger(__name__)
 wd = WeedFS("master", 9333) # weed-fs master address and port
 
 
-@ts.app.task
+@shared_task
 def fire(fname):
     logger.info("start uploading %s" % fname)
     fid = wd.upload_file(fname)

@@ -1,22 +1,23 @@
 import time
 import uuid
-import tasks.uploader as upldr
 
-from flask import Flask, request
+import unterwegs.tasks.uploader as upldr
+
+from flask import request
 from uuid import uuid5
-
-app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 40
-app.config['UPLOAD_EXTENSIONS'] = ['.pdf']
+from .app import create_app
 
 
-@app.route('/')
+application = create_app()
+
+
+@application.route('/')
 def hello():
     upldr.fire(time.time())
     return 'Hello World!'
 
 
-@app.route("/upload", methods=["POST"])
+@application.route("/upload", methods=["POST"])
 def upload():
     upload_key = uuid5(uuid.NAMESPACE_URL, str(time.time())).hex
     target = "/uploads/{}".format(upload_key)

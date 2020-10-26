@@ -12,7 +12,7 @@ services:
             - 5000:5000
         volumes:
             - ./public:/public
-            - ./tasks:/web/tasks
+            - ./unterwegs:/web/unterwegs
             - ./data/uploads:/uploads
         depends_on:
             - redis
@@ -27,7 +27,7 @@ services:
         volumes:
             - ./data/worker:/data
             - ./data/uploads:/uploads
-            - ./tasks:/worker/tasks
+            - ./unterwegs:/worker/unterwegs
         depends_on:
             - redis
         links:

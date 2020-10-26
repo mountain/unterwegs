@@ -1,5 +1,9 @@
-celery[redis]
+flask
 
 redis
 typesense
 pyseaweed
+
+celery[redis]
+flask-appfactory[celery]
+

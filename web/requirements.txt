@@ -5,6 +5,7 @@ typesense
 pyseaweed
 
 celery[redis]
+flask-appfactory[celery]
 
 
 
