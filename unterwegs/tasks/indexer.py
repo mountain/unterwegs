@@ -52,7 +52,7 @@ def init_index():
                     'facet': True
                 },
             ],
-            'default_sorting_field': 'title'
+            'default_sorting_field': 'pubdate'
         })
     if 'pages' not in cs:
         client.collections.create({
@@ -75,7 +75,7 @@ def init_index():
                   'type': 'string',
                 }
             ],
-            'default_sorting_field': 'article'
+            'default_sorting_field': 'index'
         })
 
 
