@@ -81,7 +81,6 @@ def init_index():
 
 @shared_task(
     max_retries=3,
-    soft_time_limit=5
 )
 def index_article(fid):
     init_index()
@@ -101,7 +100,6 @@ def index_article(fid):
 
 @shared_task(
     max_retries=3,
-    soft_time_limit=5
 )
 def index_page(fid, pid, idx):
     init_index()

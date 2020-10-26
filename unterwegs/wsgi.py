@@ -12,7 +12,12 @@ application = create_app()
 
 
 @application.route('/')
-def hello():
+def home():
+    return 'Hello World!'
+
+
+@application.route('/search')
+def search():
     return 'Hello World!'
 
 

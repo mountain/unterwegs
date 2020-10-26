@@ -5,4 +5,4 @@ COPY requirements.txt requirements.txt
 RUN pip3 install  -i https://pypi.douban.com/simple/ -r requirements.txt
 COPY . .
 COPY policy.xml /etc/ImageMagick-6/policy.xml
-CMD ["celery", "-A", "unterwegs.celery", "worker", "-l", "INFO"]
+ENTRYPOINT ["/bin/bash", "./start.sh"]
