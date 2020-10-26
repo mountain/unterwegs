@@ -5,12 +5,12 @@ from celery import shared_task
 
 client = typesense.Client({
   'nodes': [{
-    'host': 'localhost',
+    'host': 'typesense',
     'port': '8108',
     'protocol': 'http',
   }],
 
-  'api_key': '<API_KEY>',
+  'api_key': 'MUzQD3ncGDBihx6YGTBeBJ4Q',
   'connection_timeout_seconds': 2
 })
 
