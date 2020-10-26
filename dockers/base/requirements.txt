@@ -1,0 +1,12 @@
+flask
+celery[redis]
+flask-appfactory[celery]
+
+redis
+typesense
+pyseaweed
+
+wand
+pdfminer
+pypdf2
+

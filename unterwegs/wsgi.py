@@ -13,7 +13,6 @@ application = create_app()
 
 @application.route('/')
 def hello():
-    upldr.fire(time.time())
     return 'Hello World!'
 
 

@@ -1,5 +1,8 @@
 version: "3.8"
 services:
+    base:
+        image: "unterwegs:base"
+        build: ./dockers/base
     redis:
         image: "redis:6.0.8-buster"
         ports:
@@ -7,7 +10,7 @@ services:
         volumes:
             - ./data/redis:/data
     web:
-        build: ./web
+        build: ./dockers/web
         ports:
             - 5000:5000
         volumes:
@@ -23,7 +26,7 @@ services:
             - "volume:volume"
             - "filer:filer"
     worker:
-        build: ./worker
+        build: ./dockers/worker
         volumes:
             - ./data/worker:/data
             - ./data/uploads:/uploads

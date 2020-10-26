@@ -11,6 +11,6 @@ BROKER_URL = "redis://redis:6379/0"
 PACKAGES = [
     'unterwegs.tasks.converter',
     'unterwegs.tasks.indexer',
-    'unterwegs.tasks.spliter',
+    'unterwegs.tasks.splitter',
     'unterwegs.tasks.uploader',
 ]
