@@ -1,32 +1,16 @@
-import typesense
-
-from pyseaweed import WeedFS
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from unterwegs.utils.pdf import pdf2meta, pdf2txt
+from unterwegs.utils.db import wd, ts
 
 
 logger = get_task_logger(__name__)
 
-wd = WeedFS("master", 9333)  # weed-fs master address and port
-
-
-client = typesense.Client({
-  'nodes': [{
-    'host': 'typesense',
-    'port': '8108',
-    'protocol': 'http',
-  }],
-
-  'api_key': 'MUzQD3ncGDBihx6YGTBeBJ4Q',
-  'connection_timeout_seconds': 2
-})
-
 
 def init_index():
-    cs = set([c['name'] for c in client.collections.retrieve()])
+    cs = set([c['name'] for c in ts.collections.retrieve()])
     if 'articles' not in cs:
-        client.collections.create({
+        ts.collections.create({
             'name': 'articles',
             'fields': [
                 {
@@ -55,7 +39,7 @@ def init_index():
             'default_sorting_field': 'pubdate'
         })
     if 'pages' not in cs:
-        client.collections.create({
+        ts.collections.create({
             'name': 'pages',
             'fields': [
                 {
@@ -93,7 +77,7 @@ def index_article(fid):
         'keywords': meta['keywords']
     }
 
-    client.collections['articles'].documents.create(document)
+    ts.collections['articles'].documents.create(document)
 
     return fid
 
@@ -112,6 +96,6 @@ def index_page(fid, pid, idx):
         'content': content
     }
 
-    client.collections['pages'].documents.create(document)
+    ts.collections['pages'].documents.create(document)
 
     return fid, pid, idx

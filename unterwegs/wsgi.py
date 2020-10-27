@@ -6,6 +6,7 @@ import unterwegs.tasks.uploader as upldr
 from flask import request
 from uuid import uuid5
 from .app import create_app
+from unterwegs.utils.db import wd, rd, ts
 
 
 application = create_app()
@@ -16,9 +17,15 @@ def home():
     return 'Hello World!'
 
 
-@application.route('/search')
-def search():
-    return 'Hello World!'
+@application.route('/search/<string:q>')
+def search(q):
+    result = ts.collections['pages'].documents.search({
+        'q': q,
+        'query_by': 'content',
+        'sort_by': '_text_match:desc'
+    })
+
+    return str(result['found'])
 
 
 @application.route("/upload", methods=["POST"])

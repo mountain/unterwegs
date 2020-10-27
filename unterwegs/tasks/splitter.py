@@ -1,18 +1,13 @@
-import redis
-
 import unterwegs.tasks.converter as cnvtr
 import unterwegs.tasks.indexer as indxr
 
 from io import BytesIO
 from celery import shared_task
 from celery.utils.log import get_task_logger
-from pyseaweed import WeedFS
 from unterwegs.utils.pdf import pdf_pages
+from unterwegs.utils.db import wd, rd
 
 logger = get_task_logger(__name__)
-
-wd = WeedFS("master", 9333)  # weed-fs master address and port
-rd = redis.Redis(host='redis', port=6379, db=1)
 
 
 @shared_task(
