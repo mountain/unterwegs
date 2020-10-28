@@ -1,10 +1,8 @@
 from celery import shared_task
 from celery.utils.log import get_task_logger
 
-import unterwegs.tasks.analyzer as anlzr
-
-from unterwegs.utils.pdf import pdf2meta, pdf2txt
-from unterwegs.utils.db import wd, ts
+from unterwegs.utils.db import wd, ts, rn
+from unterwegs.nlp.doc import bow
 
 
 logger = get_task_logger(__name__)
@@ -69,37 +67,11 @@ def init_index():
 @shared_task(
     max_retries=3,
 )
-def index_article(fid):
+def analyze_bow(pid):
     init_index()
 
-    meta = pdf2meta(wd.get_file(fid))
-    document = {
-        'id': fid,
-        'title': meta['title'],
-        'authors': meta['authors'],
-        'keywords': meta['keywords']
-    }
+    page = ts.collections['pages'].documents[pid].retrieve()
+    rn.zadd('bow:%s' % pid, bow(page['content']))
 
-    ts.collections['articles'].documents.create(document)
+    return pid
 
-    return fid
-
-
-@shared_task(
-    max_retries=3,
-)
-def index_page(fid, pid, idx):
-    init_index()
-
-    content = pdf2txt(wd.get_file(fid))
-    document = {
-        'id': pid,
-        'article': fid,
-        'index': idx,
-        'content': content
-    }
-
-    ts.collections['pages'].documents.create(document)
-    anlzr.analyze_bow.delay(pid)
-
-    return fid, pid, idx

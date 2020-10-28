@@ -1,1 +1,8 @@
+wand
+pdfminer
+pypdf2
+
+spacy
+spacy-lookups-data
+
 

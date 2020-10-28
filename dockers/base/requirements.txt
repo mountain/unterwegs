@@ -6,7 +6,3 @@ redis
 typesense
 pyseaweed
 
-wand
-pdfminer
-pypdf2
-

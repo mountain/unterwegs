@@ -1,31 +1,46 @@
+import os
 import time
 import uuid
+import json
 
 import unterwegs.tasks.uploader as upldr
 
-from flask import request
+from flask import request, render_template, send_from_directory
 from uuid import uuid5
 from .app import create_app
 from unterwegs.utils.db import wd, rd, ts
+from unterwegs.utils.coocur import coocurrence
 
 
+specs = {}
 application = create_app()
 
+root_dir = os.path.dirname(os.getcwd())
 
-@application.route('/')
-def home():
-    return 'Hello World!'
+
+def load_spec(key):
+    with open('/web/unterwegs/spec/%s.json' % key) as j:
+        specs[key] = json.load(j)
+
+
+load_spec('fdl')
 
 
 @application.route('/search/<string:q>')
 def search(q):
     result = ts.collections['pages'].documents.search({
         'q': q,
+        'per_page': 25,
         'query_by': 'content',
         'sort_by': '_text_match:desc'
     })
 
-    return str(result['found'])
+    nodes, links = coocurrence([h['document']['id'] for h in result['hits']])
+    spec = specs['fdl']
+    spec['data'][0]['values'] = nodes
+    spec['data'][1]['values'] = links
+
+    return render_template('vega.html', spec=spec)
 
 
 @application.route("/upload", methods=["POST"])
@@ -39,3 +54,8 @@ def upload():
         upldr.fire.delay(destination)
 
     return 'OK'
+
+
+@application.route("/vega/<path:filename>", methods=["GET"])
+def vega(filename):
+    return send_from_directory(os.path.join(root_dir, 'public', 'vega'), filename)

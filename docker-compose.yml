@@ -14,8 +14,8 @@ services:
         ports:
             - 5000:5000
         volumes:
-            - ./public:/public
             - ./unterwegs:/web/unterwegs
+            - ./public:/public
             - ./data/uploads:/uploads
         depends_on:
             - redis
