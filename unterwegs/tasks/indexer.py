@@ -93,7 +93,7 @@ def index_page(fid, pid, idx):
 
     init_index()
 
-    content = pdf2txt(wd.get_file(fid))
+    content = pdf2txt(wd.get_file(pid))
     document = {
         'id': pid,
         'article': fid,

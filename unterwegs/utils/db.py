@@ -1,16 +1,26 @@
 import redis
 import typesense
+import socket
 
 from pyseaweed import WeedFS
 
-rd = redis.Redis(host='redis', port=6379, db=1)  # for general tasks
-rn = redis.Redis(host='redis', port=6379, db=2)  # for nlp related tasks
 
-wd = WeedFS("master", 9333)  # weed-fs master address and port
+def lookup(name):
+    try:
+        socket.gethostbyname(name)
+        return name
+    except Exception:
+        return 'localhost'
+
+
+rd = redis.Redis(host=lookup('redis'), port=6379, db=1)  # for general tasks
+rn = redis.Redis(host=lookup('redis'), port=6379, db=2)  # for nlp related tasks
+
+wd = WeedFS(lookup("master"), 9333)  # weed-fs master address and port
 
 ts = typesense.Client({
   'nodes': [{
-    'host': 'typesense',
+    'host': lookup('typesense'),
     'port': '8108',
     'protocol': 'http',
   }],

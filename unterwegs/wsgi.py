@@ -30,12 +30,13 @@ load_spec('fdl')
 def search(q):
     result = ts.collections['pages'].documents.search({
         'q': q,
-        'per_page': 25,
+        'per_page': 200,
         'query_by': 'content',
-        'sort_by': '_text_match:desc'
+        'sort_by': '_text_match:desc',
+        'include_fields': 'id'
     })
 
-    nodes, links = coocurrence([h['document']['id'] for h in result['hits']])
+    nodes, links = coocurrence(list([h['document']['id'] for h in result['hits']]))
     spec = specs['fdl']
     spec['data'][0]['values'] = nodes
     spec['data'][1]['values'] = links
