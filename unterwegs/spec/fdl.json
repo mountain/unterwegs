@@ -7,18 +7,45 @@
   "autosize": "none",
 
   "signals": [
+    {
+      "name": "clear", "value": true,
+      "on": [
+        {
+          "events": "mouseup[!event.item]",
+          "update": "true",
+          "force": true
+        }
+      ]
+    },
+    {
+      "name": "shift", "value": false,
+      "on": [
+        {
+          "events": "@legendSymbol:click, @legendLabel:click",
+          "update": "event.shiftKey",
+          "force":  true
+        }
+      ]
+    },
+    {
+      "name": "clicked", "value": null,
+      "on": [
+        {
+          "events": "@legendSymbol:click, @legendLabel:click",
+          "update": "{value: datum.value}",
+          "force":  true
+        }
+      ]
+    },
+
     { "name": "cx", "update": "width / 2" },
     { "name": "cy", "update": "height / 2" },
-    { "name": "nodeRadius", "value": 8,
-      "bind": {"input": "range", "min": 1, "max": 50, "step": 1} },
-    { "name": "nodeCharge", "value": 30,
-      "bind": {"input": "range", "min":-250, "max": 250, "step": 1} },
-    { "name": "linkDistance", "value": 280,
-      "bind": {"input": "range", "min": 1, "max": 500, "step": 1} },
-    { "name": "linkStrength", "value": -8,
-      "bind": {"input": "range", "min": -10, "max": 0, "step": 0.02} },
-    { "name": "static", "value": true,
-      "bind": {"input": "checkbox"} },
+    { "name": "nodeRadius", "value": 8, "bind": {"input": "range", "min": 1, "max": 50, "step": 1} },
+    { "name": "nodeCharge", "value": 30, "bind": {"input": "range", "min":-250, "max": 250, "step": 1} },
+    { "name": "linkDistance", "value": 280, "bind": {"input": "range", "min": 1, "max": 500, "step": 1} },
+    { "name": "linkStrength", "value": -8,"bind": {"input": "range", "min": -10, "max": 0, "step": 0.02} },
+    { "name": "static", "value": true, "bind": {"input": "checkbox"} },
+
     {
       "description": "State variable for active node fix status.",
       "name": "fix", "value": false,
@@ -65,6 +92,15 @@
     {
       "name": "link-data",
       "values": []
+    },
+    {
+      "name": "selected",
+      "on": [
+        {"trigger": "clear", "remove": true},
+        {"trigger": "!shift", "remove": true},
+        {"trigger": "!shift && clicked", "insert": "clicked"},
+        {"trigger": "shift && clicked", "toggle": "clicked"}
+      ]
     }
   ],
 
@@ -74,6 +110,18 @@
       "type": "ordinal",
       "domain": {"data": "node-data", "field": "group"},
       "range": {"scheme": "category20c"}
+    }
+  ],
+
+  "legends": [
+    {
+      "fill": "color",
+      "title": "Article",
+      "orient": "bottom-right",
+      "encode": {
+        "symbols": {"enter": {"fillOpacity": {"value": 0.5}}},
+        "labels": {"update": {"text": {"field": "value"}}}
+      }
     }
   ],
 
