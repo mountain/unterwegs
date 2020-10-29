@@ -2,7 +2,6 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 
 from unterwegs.utils.db import wd, ts, rn
-from unterwegs.nlp.doc import bow
 
 
 logger = get_task_logger(__name__)
@@ -68,6 +67,8 @@ def init_index():
     max_retries=3,
 )
 def analyze_bow(pid):
+    from unterwegs.nlp.doc import bow
+
     init_index()
 
     page = ts.collections['pages'].documents[pid].retrieve()

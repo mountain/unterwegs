@@ -4,7 +4,6 @@ import unterwegs.tasks.indexer as indxr
 from io import BytesIO
 from celery import shared_task
 from celery.utils.log import get_task_logger
-from unterwegs.utils.pdf import pdf_pages
 from unterwegs.utils.db import wd, rd
 
 logger = get_task_logger(__name__)
@@ -15,6 +14,7 @@ logger = get_task_logger(__name__)
     soft_time_limit=5
 )
 def fire(fid):
+    from unterwegs.utils.pdf import pdf_pages
     logger.info("start splitting %s" % fid)
     for idx, page in pdf_pages(wd.get_file(fid)):
         with BytesIO(page) as in_file:

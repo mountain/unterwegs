@@ -1,7 +1,5 @@
 import os
 
-from io import BytesIO
-from wand.image import Image
 from celery import shared_task
 from celery.utils.log import get_task_logger
 
@@ -23,6 +21,9 @@ def convert(pid, page, width, height, key):
     soft_time_limit=5
 )
 def fire(fid, idx, pid):
+    from io import BytesIO
+    from wand.image import Image
+
     with Image(file=BytesIO(wd.get_file(pid)), resolution=120) as page:
         w, h = page.size
         convert(pid, page, 75, int(75 / w * h), 'thumbnail:small:horizontal')

@@ -3,7 +3,6 @@ from celery.utils.log import get_task_logger
 
 import unterwegs.tasks.analyzer as anlzr
 
-from unterwegs.utils.pdf import pdf2meta, pdf2txt
 from unterwegs.utils.db import wd, ts
 
 
@@ -70,6 +69,7 @@ def init_index():
     max_retries=3,
 )
 def index_article(fid):
+    from unterwegs.utils.pdf import pdf2meta
     init_index()
 
     meta = pdf2meta(wd.get_file(fid))
@@ -89,6 +89,8 @@ def index_article(fid):
     max_retries=3,
 )
 def index_page(fid, pid, idx):
+    from unterwegs.utils.pdf import pdf2txt
+
     init_index()
 
     content = pdf2txt(wd.get_file(fid))

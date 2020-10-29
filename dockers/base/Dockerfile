@@ -1,4 +1,4 @@
-FROM python:3.9-buster
+FROM python:3.8-buster
 WORKDIR /
 RUN apt-get update
 COPY requirements.txt requirements.txt
