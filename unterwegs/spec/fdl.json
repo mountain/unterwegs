@@ -121,8 +121,7 @@
         "update": {
           "size": {"signal": "2 * nodeRadius * nodeRadius"},
           "cursor": {"value": "pointer"}
-        },
-        "tooltip": {"field": "highlight", "type": "text"}
+        }
       },
 
       "transform": [
@@ -162,5 +161,9 @@
         }
       ]
     }
-  ]
+  ],
+
+  "encoding": {
+    "tooltip": {"field": "highlight", "type": "text"}
+  }
 }

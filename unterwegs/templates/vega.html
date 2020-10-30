@@ -12,7 +12,7 @@
 <div id="vis"></div>
 
 <script type="text/javascript">
-  var spec = {{spec|tojson}};
+  var spec = "{{spec}}";
   vegaEmbed('#vis', spec).then(function(result) {
       //result.view
   }).catch(console.error);

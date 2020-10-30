@@ -5,7 +5,7 @@ import json
 
 import unterwegs.tasks.uploader as upldr
 
-from flask import request, render_template, send_from_directory
+from flask import request, render_template, send_from_directory, url_for, Response
 from uuid import uuid5
 from .app import create_app
 from unterwegs.utils.db import wd, rd, ts
@@ -28,6 +28,11 @@ load_spec('fdl')
 
 @application.route('/search/<string:q>')
 def search(q):
+    return render_template('vega.html', query=q, spec=url_for('search_vega', q=q, _external=True))
+
+
+@application.route('/search/<string:q>/vg.json')
+def search_vega(q):
     result = ts.collections['pages'].documents.search({
         'q': q,
         'per_page': 200,
@@ -36,15 +41,13 @@ def search(q):
         'include_fields': 'id'
     })
 
-    highlights = {h['document']['id']: h['highlights'][0]['snippet'] for h in result['hits']}
-    nodes, links = coocurrence(list([h['document']['id'] for h in result['hits']]))
-    nodes = [{'name': nd['name'], 'group': nd['group'], 'index': nd['index'], 'highlight': highlights[nd['name']]} for nd in nodes]
+    nodes, links = coocurrence(result['hits'])
 
     spec = specs['fdl']
     spec['data'][0]['values'] = nodes
     spec['data'][1]['values'] = links
 
-    return render_template('vega.html', query=q, spec=spec)
+    return Response(json.dumps(spec), content_type='application/json')
 
 
 @application.route("/upload", methods=["POST"])
