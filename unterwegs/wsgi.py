@@ -36,12 +36,15 @@ def search(q):
         'include_fields': 'id'
     })
 
+    highlights = {h['document']['id']: h['highlights'][0]['snippet'] for h in result['hits']}
     nodes, links = coocurrence(list([h['document']['id'] for h in result['hits']]))
+    nodes = [{'name': nd['name'], 'group': nd['group'], 'index': nd['index'], 'highlight': highlights[nd['name']]} for nd in nodes]
+
     spec = specs['fdl']
     spec['data'][0]['values'] = nodes
     spec['data'][1]['values'] = links
 
-    return render_template('vega.html', spec=spec)
+    return render_template('vega.html', query=q, spec=spec)
 
 
 @application.route("/upload", methods=["POST"])

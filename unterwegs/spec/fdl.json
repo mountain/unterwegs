@@ -1,43 +1,12 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
-  "description": "A node-link diagram with force-directed layout, depicting character co-occurrence in the novel Les Misérables.",
+  "description": "A node-link diagram with force-directed layout, depicting word co-occurrence",
   "width": 700,
   "height": 500,
   "padding": 0,
   "autosize": "none",
 
   "signals": [
-    {
-      "name": "clear", "value": true,
-      "on": [
-        {
-          "events": "mouseup[!event.item]",
-          "update": "true",
-          "force": true
-        }
-      ]
-    },
-    {
-      "name": "shift", "value": false,
-      "on": [
-        {
-          "events": "@legendSymbol:click, @legendLabel:click",
-          "update": "event.shiftKey",
-          "force":  true
-        }
-      ]
-    },
-    {
-      "name": "clicked", "value": null,
-      "on": [
-        {
-          "events": "@legendSymbol:click, @legendLabel:click",
-          "update": "{value: datum.value}",
-          "force":  true
-        }
-      ]
-    },
-
     { "name": "cx", "update": "width / 2" },
     { "name": "cy", "update": "height / 2" },
     { "name": "nodeRadius", "value": 8, "bind": {"input": "range", "min": 1, "max": 50, "step": 1} },
@@ -92,17 +61,14 @@
     {
       "name": "link-data",
       "values": []
-    },
-    {
-      "name": "selected",
-      "on": [
-        {"trigger": "clear", "remove": true},
-        {"trigger": "!shift", "remove": true},
-        {"trigger": "!shift && clicked", "insert": "clicked"},
-        {"trigger": "shift && clicked", "toggle": "clicked"}
-      ]
     }
   ],
+
+  "selection": {
+      "pts": {
+          "type": "single"
+      }
+  },
 
   "scales": [
     {
@@ -117,7 +83,7 @@
     {
       "fill": "color",
       "title": "Article",
-      "orient": "bottom-right",
+      "orient": "top-right",
       "encode": {
         "symbols": {"enter": {"fillOpacity": {"value": 0.5}}},
         "labels": {"update": {"text": {"field": "value"}}}
@@ -147,12 +113,16 @@
       "encode": {
         "enter": {
           "fill": {"scale": "color", "field": "group"},
-          "stroke": {"value": "white"}
+          "stroke": {
+              "condition": {"selection": "pts", "value": "black"},
+              "value": "white"
+          }
         },
         "update": {
           "size": {"signal": "2 * nodeRadius * nodeRadius"},
           "cursor": {"value": "pointer"}
-        }
+        },
+        "tooltip": {"field": "highlight", "type": "text"}
       },
 
       "transform": [
@@ -171,6 +141,7 @@
         }
       ]
     },
+
     {
       "type": "path",
       "from": {"data": "link-data"},

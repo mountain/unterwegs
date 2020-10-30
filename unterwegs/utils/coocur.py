@@ -10,6 +10,7 @@ def coocurrence(pids):
         fid = fid.decode('utf-8') if fid else 'None'
         nodes.append({"name": pid, "group": fid, "index": ix})
 
+    total, avg = 0, 0
     for ix, src in enumerate(pids):
         for jx, tgt in enumerate(pids):
             if ix != jx:
@@ -20,6 +21,7 @@ def coocurrence(pids):
                 else:
                     cnt = rn.zcard(dkey)
                 if cnt > 0:
+                    total += cnt
                     links.append({"source": ix, "target": jx, "value": int(cnt)})
 
     return nodes, links
