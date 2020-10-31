@@ -1,6 +1,7 @@
 flask
 celery[redis]
 flask-appfactory[celery]
+flask-compress
 
 redis
 typesense

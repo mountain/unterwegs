@@ -1,0 +1,19 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "description": "A page panel",
+    "padding": 0,
+    "width": 720,
+    "height": 540,
+    "marks": [
+        {
+            "type": "image",
+            "encode": {
+                "enter": {
+                    "url": {
+                        "value": "https://vega.github.io/images/idl-logo.png"
+                    }
+                }
+            }
+        }
+    ]
+}
