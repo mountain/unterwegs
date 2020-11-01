@@ -3,7 +3,10 @@ celery[redis]
 flask-appfactory[celery]
 flask-compress
 
+orjson
+
 redis
+hiredis
 typesense
 pyseaweed
 

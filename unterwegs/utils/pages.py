@@ -1,5 +1,4 @@
-import json
-import io
+import orjson as json
 
 from unterwegs.utils.db import ts, rd, rn
 from zlib import decompress, compress
@@ -9,7 +8,7 @@ def search_result(q):
     ckey = 'search:%s' % q
     result = rd.get(ckey)
     if result is not None:
-        result = json.loads(decompress(result).decode('utf-8'))
+        result = json.loads(decompress(result))
     else:
         result = ts.collections['pages'].documents.search({
             'q': q,
@@ -18,7 +17,7 @@ def search_result(q):
             'sort_by': '_text_match:desc',
             'include_fields': 'id'
         })
-        rd.set(ckey, compress(json.dumps(result).encode('utf-8')))
+        rd.set(ckey, compress(json.dumps(result)))
         rd.expire(ckey, 3600)
 
     return result
