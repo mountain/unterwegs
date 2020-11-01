@@ -33,6 +33,8 @@ function search(specPageUrl, specInfoUrl, specAnalysisUrl, specClusterUrl) {
             viewCluster = result.view;
             viewCluster.addEventListener('click', function (evt, src) {
                 $('#page image').attr('href', '/page/' + src.datum.name + '.png');
+                $('#page image').attr('width', 760);
+                $('#page image').attr('height', 1075);
                 $(window).trigger('resize');
             })
         }).catch(console.error);
