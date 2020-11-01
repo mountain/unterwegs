@@ -3,7 +3,7 @@
     "description": "An analysis information panel",
     "padding": 0,
     "width": 720,
-    "height": 270,
+    "height": 240,
     "marks": [
         {
             "type": "image",

@@ -73,6 +73,14 @@ def index_article(fid):
     init_index()
 
     meta = pdf2meta(wd.get_file(fid))
+
+    if 'title' not in meta:
+        meta['title'] = '?'
+    if 'authors' not in meta:
+        meta['authors'] = ['?']
+    if 'keywords' not in meta:
+        meta['keywords'] = ['?']
+
     document = {
         'id': fid,
         'title': meta['title'],

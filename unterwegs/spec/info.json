@@ -2,8 +2,8 @@
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "An infomation panel",
     "padding": 0,
-    "width": 720,
-    "height": 270,
+    "width": 240,
+    "height": 240,
     "marks": [
         {
             "type": "image",

@@ -80,6 +80,16 @@ def get_data(q, dataname):
     return Response(json.dumps(data), content_type='application/json')
 
 
+@application.route('/page/<string:pid>.png')
+def get_page_png(pid):
+    return Response(wd.get_file(rd.get('png:%s' % pid).decode('utf-8')), content_type='image/png')
+
+
+@application.route('/page/<string:pid>.pdf')
+def get_page_pdf(pid):
+    return Response(wd.get_file(pid), content_type='application/pdf')
+
+
 @application.route("/upload", methods=["POST"])
 def upload():
     upload_key = uuid5(uuid.NAMESPACE_URL, str(time.time())).hex
@@ -91,6 +101,11 @@ def upload():
         upldr.fire.delay(destination)
 
     return 'OK'
+
+
+@application.route("/js/<path:filename>", methods=["GET"])
+def js(filename):
+    return send_from_directory(os.path.join(root_dir, 'public', 'js'), filename, cache_timeout=0)
 
 
 @application.route("/vega/<path:filename>", methods=["GET"])

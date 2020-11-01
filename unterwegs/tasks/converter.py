@@ -8,12 +8,16 @@ from unterwegs.utils.db import wd, rd
 logger = get_task_logger(__name__)
 
 
-def convert(pid, page, width, height, key):
+def convert(pid, page):
+    from wand.image import Image, Color
     pngfname = '/data/converter/%s.png' % pid
-    page.resize(width=width, height=height)
-    page.save(filename=pngfname)
-    rd.set('%s:%s' % (key, pid), wd.upload_file(pngfname))
-    os.unlink(pngfname)
+    with Image(page.sequence[0]) as img:
+        img.format = 'png'
+        img.background_color = Color('white')
+        img.alpha_channel = 'remove'
+        img.save(filename=pngfname)
+        rd.set('png:%s' % pid, wd.upload_file(pngfname))
+        os.unlink(pngfname)
 
 
 @shared_task(
@@ -24,12 +28,8 @@ def fire(fid, idx, pid):
     from io import BytesIO
     from wand.image import Image
 
-    with Image(file=BytesIO(wd.get_file(pid)), resolution=120) as page:
-        w, h = page.size
-        convert(pid, page, 75, int(75 / w * h), 'thumbnail:small:horizontal')
-        convert(pid, page, 75, int(75 / h * w), 'thumbnail:small:vertical')
-        convert(pid, page, 200, int(200 / w * h), 'thumbnail:big:horizontal')
-        convert(pid, page, 200, int(200 / h * w), 'thumbnail:big:vertical')
+    with Image(file=BytesIO(wd.get_file(pid)), resolution=300) as page:
+        convert(pid, page.sequence[0])
 
     return pid
 

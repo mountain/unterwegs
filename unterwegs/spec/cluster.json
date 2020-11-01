@@ -2,7 +2,7 @@
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "A node-link diagram with force-directed layout, depicting word co-occurrence",
     "width": 720,
-    "height": 540,
+    "height": 480,
     "padding": 0,
     "autosize": "fit",
 
