@@ -8,8 +8,8 @@ import unterwegs.tasks.uploader as upldr
 from flask import request, render_template, send_from_directory, url_for, Response
 from uuid import uuid5
 from .app import create_app
-from unterwegs.utils.db import wd, rd, ts
-from unterwegs.utils.pages import coocurrence
+from unterwegs.utils.db import wd, rd, ts, rn
+from unterwegs.utils.pages import search_result, coocurrence_nodes, coocurrence_links
 
 
 specs = {}
@@ -54,28 +54,11 @@ def get_spec(q, specname):
 @application.route('/data/<string:q>/<string:dataname>.json')
 def get_data(q, dataname):
     data = []
+    result = search_result(q)
     if dataname == 'nodes':
-        result = ts.collections['pages'].documents.search({
-            'q': q,
-            'per_page': 200,
-            'query_by': 'content',
-            'sort_by': '_text_match:desc',
-            'include_fields': 'id'
-        })
-
-        nodes, links = coocurrence(result['hits'])
-        data = nodes
+        data = coocurrence_nodes(result['hits'])
     elif dataname == 'links':
-        result = ts.collections['pages'].documents.search({
-            'q': q,
-            'per_page': 200,
-            'query_by': 'content',
-            'sort_by': '_text_match:desc',
-            'include_fields': 'id'
-        })
-
-        nodes, links = coocurrence(result['hits'])
-        data = links
+        data = coocurrence_links(result['hits'])
 
     return Response(json.dumps(data), content_type='application/json')
 
