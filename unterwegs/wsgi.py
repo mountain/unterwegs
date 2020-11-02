@@ -9,7 +9,7 @@ from flask import request, render_template, send_from_directory, url_for, Respon
 from uuid import uuid5
 from .app import create_app
 from unterwegs.utils.db import wd, rd, ts, rn
-from unterwegs.utils.pages import search_result, coocurrence_nodes, coocurrence_links
+from unterwegs.utils.pages import search_result, coocurrence_nodes, coocurrence_links, frequency_of
 
 
 specs = {}
@@ -34,31 +34,34 @@ load_spec()
 def search(q):
     return render_template('vega.html',
         query=q,
-        specPage=url_for('get_spec', q=q, specname='page', _external=True),
-        specInfo=url_for('get_spec', q=q, specname='info', _external=True),
-        specAnalysis=url_for('get_spec', q=q, specname='analysis', _external=True),
-        specCluster=url_for('get_spec', q=q, specname='cluster', _external=True)
+        specPage=url_for('get_spec', q=q, pid='_', specname='page', _external=True),
+        specAnalysis=url_for('get_spec', q=q, pid='_', specname='analysis', _external=True),
+        specCluster=url_for('get_spec', q=q, pid='_', specname='cluster', _external=True)
     )
 
 
-@application.route('/spec/<string:q>/<string:specname>.json')
-def get_spec(q, specname):
+@application.route('/spec/<string:q>/<string:pid>/<string:specname>.json')
+def get_spec(q, pid, specname):
     spec = specs[specname]
     if specname == 'cluster':
-        spec['data'][0]['url'] = url_for('get_data', q=q, dataname='nodes', _external=True)
-        spec['data'][1]['url'] = url_for('get_data', q=q, dataname='links', _external=True)
+        spec['data'][0]['url'] = url_for('get_data', q=q, pid=pid, dataname='nodes', _external=True)
+        spec['data'][1]['url'] = url_for('get_data', q=q, pid=pid, dataname='links', _external=True)
+    if specname == 'analysis':
+        spec['data'][0]['url'] = url_for('get_data', q=q, pid=pid, dataname='frequency', _external=True)
 
     return Response(json.dumps(spec), content_type='application/json')
 
 
-@application.route('/data/<string:q>/<string:dataname>.json')
-def get_data(q, dataname):
+@application.route('/data/<string:q>/<string:pid>/<string:dataname>.json')
+def get_data(q, pid, dataname):
     data = []
     result = search_result(q)
     if dataname == 'nodes':
-        data = coocurrence_nodes(result['hits'])
+        data = coocurrence_nodes(q, result['hits'])
     elif dataname == 'links':
-        data = coocurrence_links(result['hits'])
+        data = coocurrence_links(q, result['hits'])
+    elif dataname == 'frequency':
+        data = frequency_of(q, pid, result['hits'])
 
     return Response(json.dumps(data), content_type='application/json')
 

@@ -10,33 +10,44 @@ jQuery.getMultipleJSON = function(){
 };
 
 var viewPage = null;
-var viewInfo = null;
 var viewAnalysis = null;
 var viewCluster = null;
 
-function search(specPageUrl, specInfoUrl, specAnalysisUrl, specClusterUrl) {
-    $.getMultipleJSON(specPageUrl, specInfoUrl, specAnalysisUrl)
+function search(specPageUrl, specAnalysisUrl, specClusterUrl) {
+    $.getMultipleJSON(specPageUrl, specAnalysisUrl)
     .fail(function(jqxhr, textStatus, error){})
-    .done(function(specPage, specInfo, specAnalysis) {
+    .done(function(specPage, specAnalysis) {
         specPage = vega.parse(specPage);
-        specInfo = vega.parse(specInfo);
         specAnalysis = vega.parse(specAnalysis);
 
         viewPage = new vega.View(specPage).logLevel(vega.Warn).renderer('svg').initialize('#page').hover();
-        viewInfo = new vega.View(specInfo).logLevel(vega.Warn).renderer('svg').initialize('#info').hover();
         viewAnalysis = new vega.View(specAnalysis).logLevel(vega.Warn).renderer('svg').initialize('#stats').hover();
         viewPage.runAsync();
-        viewInfo.runAsync();
         viewAnalysis.runAsync();
 
         vegaEmbed('#cluster', specClusterUrl).then(function(result) {
             viewCluster = result.view;
             viewCluster.addEventListener('click', function (evt, src) {
-                $('#page image').attr('href', '/page/' + src.datum.name + '.png');
+                var pid = src.datum.name;
+                var q = window.location.pathname.split('/')[2];
+
+                $('#page image').attr('href', '/page/' + pid + '.png');
                 $('#page image').attr('width', 760);
                 $('#page image').attr('height', 1075);
+
+                var urlFrequency = '/data/' + q + '/' + pid + '/frequency.json';
+                $.getJSON(urlFrequency)
+                .fail(function(jqxhr, textStatus, error){
+                    console.error(error)
+                }).done(function(dataFreq) {
+                    viewAnalysis.data('frequency', dataFreq);
+                    viewAnalysis = viewAnalysis.renderer('svg').initialize('#stats').hover();
+                    viewAnalysis.runAsync();
+                });
+
                 $(window).trigger('resize');
             })
+
         }).catch(console.error);
     })
 }

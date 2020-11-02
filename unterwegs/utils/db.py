@@ -15,6 +15,7 @@ def lookup(name):
 
 rd = redis.Redis(host=lookup('redis'), port=6379, db=1)  # for general tasks
 rn = redis.Redis(host=lookup('redis'), port=6379, db=2)  # for nlp related tasks
+rc = redis.Redis(host=lookup('redis'), port=6379, db=3)  # for cache only
 
 wd = WeedFS(lookup("master"), 9333)  # weed-fs master address and port
 

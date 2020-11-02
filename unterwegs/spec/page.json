@@ -1,9 +1,9 @@
 {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "A page panel",
-    "padding": 0,
+    "padding": 30,
     "width": 760,
-    "height": 1075,
+    "height": 1070,
     "marks": [
         {
             "type": "image",

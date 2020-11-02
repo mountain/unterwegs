@@ -1,19 +1,81 @@
 {
-    "$schema": "https://vega.github.io/schema/vega/v5.json",
-    "description": "An analysis information panel",
-    "padding": 0,
-    "width": 380,
-    "height": 1075,
-    "marks": [
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "A term-frequency viewer",
+  "width": 760,
+  "height": 250,
+  "padding": 30,
+  "autosize": "fit",
+
+  "data": [
+    {
+      "name": "frequency",
+      "url": "",
+      "transform": [
         {
-            "type": "image",
-            "encode": {
-                "enter": {
-                    "url": {
-                        "value": "https://vega.github.io/images/idl-logo.png"
-                    }
-                }
-            }
+          "type": "formula",
+          "as": "ratio",
+          "expr": "datum.total / datum.page"
         }
-    ]
+      ]
+    }
+   ],
+
+  "scales": [
+    {
+      "name": "x",
+      "type": "linear",
+      "round": false,
+      "nice": true,
+      "zero": true,
+      "domain": {"data": "frequency", "field": "index"},
+      "range": "width"
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "round": false,
+      "nice": true,
+      "zero": true,
+      "domain": {"data": "frequency", "field": "ratio"},
+      "range": "height"
+    }
+  ],
+
+  "axes": [
+    {
+      "scale": "x",
+      "grid": true,
+      "domain": false,
+      "orient": "bottom",
+      "title": "index"
+    },
+    {
+      "scale": "y",
+      "grid": true,
+      "domain": false,
+      "orient": "left",
+      "titlePadding": 5,
+      "title": "ratio"
+    }
+  ],
+
+  "marks": [
+    {
+      "name": "marks",
+      "type": "symbol",
+      "from": {"data": "frequency"},
+      "encode": {
+        "update": {
+          "x": {"scale": "x", "field": "index"},
+          "y": {"scale": "y", "field": "ratio"},
+          "shape": {"value": "circle"},
+          "strokeWidth": {"value": 2},
+          "opacity": {"value": 0.5},
+          "stroke": {"value": "#4682b4"},
+          "fill": {"value": "transparent"},
+          "tooltip": {"field": "term"}
+        }
+      }
+    }
+  ]
 }
