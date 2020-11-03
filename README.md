@@ -6,7 +6,7 @@ Unterwegs: a personal knowledge tool
 the initial idea
 ------------------
 
-Where is an ideal personal knowledge tool?
+What is an ideal personal knowledge tool?
 * there have been a bunch of note-taking tools, but without fulltext searching, easy reference and citation
 * there have been several open-sourced searching engines, but very complex to config and set-up
 * there have been many document management tools, but most of them can only manage files not pages or paragraphs
