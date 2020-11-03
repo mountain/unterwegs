@@ -8,13 +8,13 @@ the initial idea
 
 What is an ideal personal knowledge tool?
 * there have been a bunch of note-taking tools, but without fulltext searching, easy reference and citation
-* there have been several open-sourced searching engines, but very complex to config and set-up
+* there have been several open-sourced searching engines, but are very complex to config and set-up
 * there have been many document management tools, but most of them can only manage files not pages or paragraphs
 
 Why it can not integrate all of these handy features in one tool? Maybe it is too heavy for any desktop application.
 
-Then it comes with **Unterwegs**, a personal knowledge tool, running on a Home-NAS or a family PC server,
-which may generally cost $500 ~ $1000.
+Then it comes with **Unterwegs**, a personal knowledge tool, running on a Home-NAS or a family server,
+which may generally cost you $500 ~ $1000.
 
 
 the core concept
