@@ -20,7 +20,7 @@ which may generally cost you $500 ~ $1000.
 the core concept
 ------------------
 
-Note cards, desktop, library are the core metaphor, and it also featurs
+Note cards, desktop, library are the core metaphor, and it also features
 * reading/authoring:
   * text: markdown with math formula support
   * datavis: support vega data visualization
