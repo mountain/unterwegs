@@ -80,12 +80,15 @@ def index_article(fid):
         meta['authors'] = ['?']
     if 'keywords' not in meta:
         meta['keywords'] = ['?']
+    if 'pubdate' not in meta:
+        meta['pubdate'] = ['?']
 
     document = {
         'id': fid,
         'title': meta['title'],
         'authors': meta['authors'],
-        'keywords': meta['keywords']
+        'keywords': meta['keywords'],
+        'pubdate': meta['pubdate']
     }
 
     ts.collections['articles'].documents.create(document)
