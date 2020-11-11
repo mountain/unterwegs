@@ -14,13 +14,26 @@
     <div class="container">
         <h2 class="text-center">Search: {{query}}</h2>
 
-        <div class="row">
-            <div id="cluster" class="col"></div>
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="result-tab" data-toggle="tab" href="#result" role="tab" aria-controls="result" aria-selected="true">Result</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="cluzter-tab" data-toggle="tab" href="#cluster" role="tab" aria-controls="cluzter" aria-selected="false">Cluster</a>
+          </li>
+        </ul>
+        <div class="tab-content row">
+            <div class="tab-pane fade show active col" id="result" role="tabpanel" aria-labelledby="result-tab">
+                {% for result in results %}
+                    <div class="flash">{{ result['highlights']['snippet'] }}</div>
+                {% endfor %}
+            </div>
+            <div class="tab-pane fade col" id="cluzter" role="tabpanel" aria-labelledby="cluzter-tab">
+                <div id="cluster" class="col"></div>
+                <div id="stats" class="col"></div>
+            </div>
         </div>
         <div class="row">
-            <div id="stats" class="col"></div>
-        </div>
-       <div class="row">
             <div id="page" class="col"></div>
         </div>
 

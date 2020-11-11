@@ -32,8 +32,9 @@ load_spec()
 
 @application.route('/search/<string:q>')
 def search(q):
+    rs = search_result(q=q)
     return render_template('vega.html',
-        query=q,
+        query=q, results=rs,
         specPage=url_for('get_spec', q=q, pid='_', specname='page', _external=True),
         specAnalysis=url_for('get_spec', q=q, pid='_', specname='analysis', _external=True),
         specCluster=url_for('get_spec', q=q, pid='_', specname='cluster', _external=True)
