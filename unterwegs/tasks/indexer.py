@@ -72,16 +72,19 @@ def index_article(fid):
     from unterwegs.utils.pdf import pdf2meta
     init_index()
 
-    meta = pdf2meta(wd.get_file(fid))
+    meta = {}
+    try:
+        meta = pdf2meta(wd.get_file(fid))
+    except Exception:
+        get_task_logger('indexer').info(fid)
 
+    meta['pubdate'] = 0
     if 'title' not in meta:
         meta['title'] = '?'
     if 'authors' not in meta:
         meta['authors'] = ['?']
     if 'keywords' not in meta:
         meta['keywords'] = ['?']
-    if 'pubdate' not in meta:
-        meta['pubdate'] = 0
 
     document = {
         'id': fid,
@@ -91,7 +94,10 @@ def index_article(fid):
         'pubdate': meta['pubdate']
     }
 
-    ts.collections['articles'].documents.create(document)
+    try:
+        ts.collections['articles'].documents.create(document)
+    except Exception:
+        get_task_logger('indexer').info(fid)
 
     return fid
 

@@ -15,7 +15,7 @@ def search_result(q):
             'per_page': 200,
             'query_by': 'content',
             'sort_by': '_text_match:desc',
-            'include_fields': 'id',
+            'include_fields': 'id,article',
             'drop_tokens_threshold': 0,
             'typo_tokens_threshold': 0,
             'highlight_affix_num_tokens': 50,
