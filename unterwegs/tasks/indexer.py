@@ -81,7 +81,7 @@ def index_article(fid):
     if 'keywords' not in meta:
         meta['keywords'] = ['?']
     if 'pubdate' not in meta:
-        meta['pubdate'] = ['?']
+        meta['pubdate'] = 0
 
     document = {
         'id': fid,

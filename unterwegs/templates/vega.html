@@ -14,19 +14,40 @@
     <div class="container">
         <h2 class="text-center">Search: {{query}}</h2>
 
-        <ul class="nav nav-tabs" role="tablist">
+        <div class="row">
+            <div class="input-group md-form form-sm form-2 pl-0 col-3">
+                <form action="/search">
+                  <input class="form-control my-0 py-1 lime-border" type="text" placeholder="Search" aria-label="Search" name="q" value="{{query}}">
+                </form>
+                <div class="input-group-append">
+                    <span class="input-group-text lime lighten-2" id="basic-text1">
+                        <i class="fas fa-search text-grey" aria-hidden="true"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs row" role="tablist">
           <li class="nav-item">
             <a class="nav-link active" id="result-tab" data-toggle="tab" href="#result" role="tab" aria-controls="result" aria-selected="true">Result</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="cluzter-tab" data-toggle="tab" href="#cluster" role="tab" aria-controls="cluzter" aria-selected="false">Cluster</a>
+            <a class="nav-link" id="cluzter-tab" data-toggle="tab" href="#cluzter" role="tab" aria-controls="cluzter" aria-selected="false">Cluster</a>
           </li>
         </ul>
         <div class="tab-content row">
             <div class="tab-pane fade show active col" id="result" role="tabpanel" aria-labelledby="result-tab">
+                <ul>
                 {% for result in results['hits'] %}
-                    <div class="flash">{{ result['highlights'][0]['snippet'] | safe }}</div>
+                    <li>article: {{ result['document']['article'] | safe}}</li>
+                    <li>page: {{ result['document']['id'] | safe}}</li>
+                    {% for highlight in result['highlights'] %}
+                        <li>
+                            <p>{{ highlight['snippet'] | safe }}</p>
+                        </li>
+                    {% endfor %}
                 {% endfor %}
+                </ul>
             </div>
             <div class="tab-pane fade col" id="cluzter" role="tabpanel" aria-labelledby="cluzter-tab">
                 <div id="cluster" class="col"></div>

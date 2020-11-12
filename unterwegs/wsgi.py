@@ -5,7 +5,7 @@ import json
 
 import unterwegs.tasks.uploader as upldr
 
-from flask import request, render_template, send_from_directory, url_for, Response
+from flask import Response, request, render_template, send_from_directory, url_for, redirect
 from uuid import uuid5
 from .app import create_app
 from unterwegs.utils.db import wd, rd, ts, rn
@@ -30,8 +30,13 @@ def load_spec():
 load_spec()
 
 
+@application.route('/search')
+def search():
+    return redirect(url_for('search_by', q=request.args['q']))
+
+
 @application.route('/search/<string:q>')
-def search(q):
+def search_by(q):
     rs = search_result(q=q)
     return render_template('vega.html',
         query=q, results=rs,

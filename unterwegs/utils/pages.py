@@ -18,6 +18,7 @@ def search_result(q):
             'include_fields': 'id',
             'drop_tokens_threshold': 0,
             'typo_tokens_threshold': 0,
+            'highlight_affix_num_tokens': 50,
         })
         rc.set(ckey, compress(json.dumps(result)))
         rc.expire(ckey, 3600)
