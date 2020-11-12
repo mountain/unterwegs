@@ -30,15 +30,44 @@ def load_spec():
 load_spec()
 
 
+@application.route('/article')
+def article():
+    return redirect(url_for('article_by', id=request.args['id']))
+
+
+@application.route('/page')
+def page():
+    return redirect(url_for('page_by', id=request.args['id']))
+
+
 @application.route('/search')
 def search():
     return redirect(url_for('search_by', q=request.args['q']))
 
 
+@application.route('/article/<string:aid>')
+def article_by(aid):
+    pids = rd.zrange('article:%s' % aid, 0, -1)
+    return render_template('article.html',
+        aid=aid,
+        pids=pids,
+    )
+
+
+@application.route('/page/<string:pid>')
+def page_by(pid):
+    aid = rd.get('articleOf:page:%s' % pid).decode('utf-8')
+
+    return render_template('page.html',
+        pid=pid,
+        aid=aid,
+    )
+
+
 @application.route('/search/<string:q>')
 def search_by(q):
     rs = search_result(q=q)
-    return render_template('vega.html',
+    return render_template('search.html',
         query=q, results=rs,
         specPage=url_for('get_spec', q=q, pid='_', specname='page', _external=True),
         specAnalysis=url_for('get_spec', q=q, pid='_', specname='analysis', _external=True),
