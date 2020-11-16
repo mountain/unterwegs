@@ -33,7 +33,7 @@ function search(specPageUrl, specAnalysisUrl, specClusterUrl) {
 
                 $('#page image').attr('href', '/page/' + pid + '.png');
                 $('#page image').attr('width', 760);
-                $('#page image').attr('height', 1075);
+                $('#page image').wrap("<a href='/page/'" + pid + "></a>");
 
                 var urlFrequency = '/data/' + q + '/' + pid + '/frequency.json';
                 $.getJSON(urlFrequency)
