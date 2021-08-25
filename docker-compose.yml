@@ -84,7 +84,7 @@ services:
         deploy:
             resources:
                 limits:
-                    memory: 9g
+                    memory: 15g
         ports:
             - 7777:7777
         volumes:
