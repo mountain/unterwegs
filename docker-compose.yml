@@ -4,7 +4,7 @@ services:
         image: "unterwegs:base"
         build: ./dockers/base
     redis:
-        image: "redis:6.0.8-buster"
+        image: "redis:6.2.5-buster"
         ports:
             - 6379:6379
         volumes:
@@ -40,7 +40,7 @@ services:
             - "volume:volume"
             - "filer:filer"
     typesense:
-        image: "typesense/typesense:0.16.0"
+        image: "typesense/typesense:0.21.0"
         ports:
             - 8108:8108
         volumes:
@@ -49,7 +49,7 @@ services:
             TYPESENSE_API_KEY: MUzQD3ncGDBihx6YGTBeBJ4Q
             TYPESENSE_DATA_DIR: "/index"
     master:
-        image: chrislusf/seaweedfs # use a remote image
+        image: chrislusf/seaweedfs:latest # use a remote image
         ports:
             - 9333:9333
             - 19333:19333
@@ -57,7 +57,7 @@ services:
         volumes:
             - ./data/master:/data
     volume:
-        image: chrislusf/seaweedfs # use a remote image
+        image: chrislusf/seaweedfs:latest # use a remote image
         ports:
             - 8080:8080
             - 18080:18080
@@ -67,7 +67,7 @@ services:
         volumes:
             - ./data/volume:/data
     filer:
-        image: chrislusf/seaweedfs # use a remote image
+        image: chrislusf/seaweedfs:latest # use a remote image
         ports:
             - 8888:8888
             - 18888:18888
@@ -79,3 +79,15 @@ services:
             - volume
         volumes:
             - ./data/filer:/data
+    lda:
+        image: "mountain/lda-server:latest"
+        ports:
+            - 7777:7777
+        volumes:
+            - ./data/lda:/data
+    simbase:
+        image: "mountain/simbase:latest"
+        ports:
+            - 7654:7654
+        volumes:
+            - ./data/simbase:/usr/local/simbase/data
