@@ -6,13 +6,13 @@ services:
     redis:
         image: "redis:6.2.5-buster"
         ports:
-            - 127.0.0.1:6379:6379
+            - 6379:6379
         volumes:
             - ./data/redis:/data
     web:
         build: ./dockers/web
         ports:
-            - 127.0.0.1:5000:5000
+            - 5000:5000
         volumes:
             - ./unterwegs:/web/unterwegs
             - ./public:/public
@@ -42,7 +42,7 @@ services:
     typesense:
         image: "typesense/typesense:0.21.0"
         ports:
-            - 127.0.0.1:8108:8108
+            - 8108:8108
         volumes:
             - ./data/index:/index
         environment:
@@ -51,16 +51,16 @@ services:
     master:
         image: chrislusf/seaweedfs:latest # use a remote image
         ports:
-            - 127.0.0.1:9333:9333
-            - 127.0.0.1:19333:19333
+            - 9333:9333
+            - 19333:19333
         command: "master -ip=master"
         volumes:
             - ./data/master:/data
     volume:
         image: chrislusf/seaweedfs:latest # use a remote image
         ports:
-            - 127.0.0.1:8080:8080
-            - 127.0.0.1:18080:18080
+            - 8080:8080
+            - 18080:18080
         command: 'volume -mserver="master:9333" -port=8080'
         depends_on:
             - master
@@ -69,8 +69,8 @@ services:
     filer:
         image: chrislusf/seaweedfs:latest # use a remote image
         ports:
-            - 127.0.0.1:8888:8888
-            - 127.0.0.1:18888:18888
+            - 8888:8888
+            - 18888:18888
         command: 'filer -master="master:9333"'
         tty: true
         stdin_open: true
@@ -86,12 +86,12 @@ services:
                 limits:
                     memory: 15g
         ports:
-            - 127.0.0.1:7777:7777
+            - 7777:7777
         volumes:
             - ./data/lda:/data
     simbase:
         image: "mountain/simbase:latest"
         ports:
-            - 127.0.0.1:7654:7654
+            - 7654:7654
         volumes:
             - ./data/simbase:/usr/local/simbase/data
