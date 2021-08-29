@@ -1,3 +1,4 @@
+werkzeug==0.16.0
 flask
 celery[redis]
 flask-appfactory[celery]
