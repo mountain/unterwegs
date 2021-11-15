@@ -1,7 +1,9 @@
 import redis
 import typesense
 import socket
+import requests
 
+from urllib.parse import urlencode, quote_plus
 from pyseaweed import WeedFS
 
 
@@ -29,3 +31,21 @@ ts = typesense.Client({
   'api_key': 'MUzQD3ncGDBihx6YGTBeBJ4Q',
   'connection_timeout_seconds': 2
 })
+
+
+sb = redis.Redis(host=lookup('simbase'), port=7654)  # for recommand engine
+if not sb.execute_command('blist'):
+    sb.execute_command('bmk', 'b768', *['b%03d' % i for i in range(768)])
+    sb.execute_command('vmk', 'b768', 'page')
+    sb.execute_command('rmk', 'page', 'page', 'cosinesq')
+
+
+class LDARequest:
+    def vectlize(self, str):
+        encoded = urlencode(str, quote_via=quote_plus)
+        return requests.get('%s:%s/topics/%s', lookup("lda"), '7777', encoded).json()
+
+lda = LDARequest()
+
+
+

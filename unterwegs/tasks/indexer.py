@@ -119,6 +119,7 @@ def index_page(fid, pid, idx):
     }
 
     ts.collections['pages'].documents.create(document)
+
     anlzr.analyze_bow.delay(pid)
 
     return fid, pid, idx
