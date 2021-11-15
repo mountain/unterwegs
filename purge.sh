@@ -1,0 +1,9 @@
+rm -rf data/filer/*
+rm -rf data/index/*
+rm -rf data/master/*
+rm -rf data/master/*
+rm -rf data/redis/*
+rm -rf data/simbase/*
+rm -rf data/uploads/*
+rm -rf data/volume/*
+rm -rf data/worker/converter/*
