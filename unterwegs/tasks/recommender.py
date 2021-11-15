@@ -1,6 +1,6 @@
 import requests
 
-from urllib.parse import urlencode, quote_plus
+from urllib.parse import quote_plus
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from unterwegs.utils.db import ri, sb, lookup
@@ -16,7 +16,7 @@ logger = get_task_logger(__name__)
 def index(pid, page_content):
     get_task_logger('recommender').info('start %s' % pid)
 
-    encoded = urlencode(page_content, quote_via=quote_plus)
+    encoded = quote_plus(page_content)
     vec = requests.get('%s:%s/topics/%s', lookup("lda"), '7777', encoded).json()['topics']
 
     if not ri.hexists('pid2vid', pid):
