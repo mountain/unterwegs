@@ -1,6 +1,6 @@
 import orjson as json
 
-from unterwegs.utils.db import ts, rd, rn, rc
+from unterwegs.utils.db import ts, rd, rn, rc, ri, sb
 from zlib import decompress, compress
 
 
@@ -111,3 +111,14 @@ def coocurrence_links(q, hits):
         rc.expire(ckey, 3600)
 
     return result
+
+
+def recommend(pid):
+    if not ri.hexists('pid2vid', pid):
+        result = []
+    else:
+        vid = int(ri.hget('pid2vid'))
+        result = sb.execute_command('rrec', 'page', vid, 'page')
+
+    result = [ri.hget('vid2pid', vid) for vid in result[:6]]
+    return list(result)
