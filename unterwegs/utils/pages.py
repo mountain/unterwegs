@@ -117,7 +117,7 @@ def recommend(pid):
     if not ri.hexists('pid2vid', pid):
         result = []
     else:
-        vid = int(ri.hget('pid2vid'))
+        vid = int(ri.hget('pid2vid', pid))
         result = sb.execute_command('rrec', 'page', vid, 'page')
 
     result = [ri.hget('vid2pid', vid) for vid in result[:6]]
