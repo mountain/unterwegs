@@ -120,5 +120,5 @@ def recommend(pid):
         vid = int(ri.hget('pid2vid', pid))
         result = sb.execute_command('rrec', 'page', vid, 'page')
 
-    result = [ri.hget('vid2pid', vid) for vid in result[:6]]
+    result = [ri.hget('vid2pid', vid).decode('utf-8') for vid in result[:6]]
     return list(result)
