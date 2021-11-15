@@ -17,7 +17,7 @@ def index(pid, page_content):
     get_task_logger('recommender').info('start %s' % pid)
 
     encoded = quote_plus(page_content)
-    vec = requests.get('%s:%s/topics/%s', lookup("lda"), '7777', encoded).json()['topics']
+    vec = requests.get('%s:%s/topics/%s' % (lookup("lda"), '7777', encoded)).json()['topics']
 
     if not ri.hexists('pid2vid', pid):
         vid = ri.incr('serial:vid')
