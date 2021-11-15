@@ -29,7 +29,7 @@ def pdf2txt(content):
         for page in PDFPage.create_pages(doc):
             interpreter.process_page(page)
 
-    return txt.getvalue()
+    return str(txt.getvalue())
 
 
 def pdf_pages(content):
