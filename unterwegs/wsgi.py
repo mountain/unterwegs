@@ -9,7 +9,7 @@ from flask import Response, request, render_template, send_from_directory, url_f
 from uuid import uuid5
 from .app import create_app
 from unterwegs.utils.db import wd, rd, ts, rn
-from unterwegs.utils.pages import search_result, coocurrence_nodes, coocurrence_links, frequency_of
+from unterwegs.utils.pages import search_result, coocurrence_nodes, coocurrence_links, frequency_of, recommend
 
 
 specs = {}
@@ -57,10 +57,12 @@ def article_by(aid):
 @application.route('/page/<string:pid>')
 def page_by(pid):
     aid = rd.get('articleOf:page:%s' % pid).decode('utf-8')
+    rlist = recommend(pid)
 
     return render_template('page.html',
         pid=pid,
         aid=aid,
+        rlist=rlist,
     )
 
 
