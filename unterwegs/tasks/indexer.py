@@ -120,7 +120,7 @@ def index_page(fid, pid, idx):
     }
 
     ts.collections['pages'].documents.create(document)
-    rcmdr.index(pid, content)
+    rcmdr.index.delay(pid, content)
     anlzr.analyze_bow.delay(pid)
 
     return fid, pid, idx
