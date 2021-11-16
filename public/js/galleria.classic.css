@@ -70,11 +70,11 @@
     background: url(classic-loader.gif) no-repeat 2px 2px;
 }
 .galleria-theme-classic .galleria-info {
-    width: 50%;
+    width: 2em;
     height: 2em;
     border: 1px solid red;
-    top: 15px;
-    right: 15px;
+    top: 5px;
+    right: 64px;
     z-index: 2;
     position: absolute;
 }
