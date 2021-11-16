@@ -81,7 +81,7 @@
     text-align: right;
     background-color: #ffffff;
     padding: 12px;
-    display: none;
+    display: block;
     /* IE7 */ zoom:1;
 }
 .galleria-theme-classic .galleria-info-title {
