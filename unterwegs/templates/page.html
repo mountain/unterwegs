@@ -21,9 +21,9 @@
         <h2 class="text-center">Page</h2>
         <a href="/article/{{aid}}">{{aid}}</a>
         <div class="galleria">
-        <img src="/page/{{pid.decode('utf-8')}}.png" width="960px">
+        <img src="/page/{{pid}}.png" width="960px">
         {% for rpid in rlist %}
-            <img src="/page/{{rpid.decode('utf-8')}}.png" width="960px">
+            <img src="/page/{{rpid}}.png" width="960px">
         {% endfor %}
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
