@@ -73,8 +73,8 @@
     width: 2em;
     height: 2em;
     border: 1px solid red;
-    top: 5px;
-    right: 64px;
+    top: 12px;
+    right: 128px;
     z-index: 2;
     position: absolute;
 }
