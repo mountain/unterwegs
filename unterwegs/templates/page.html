@@ -23,7 +23,7 @@
         <div class="galleria">
         <img src="/page/{{pid}}.png" width="960px">
         {% for rpid in rlist %}
-            <a href="/page/{{pid}}"><img src="/page/{{rpid}}.png" width="960px"></a>
+            <img src="/page/{{rpid}}.png" width="960px">
         {% endfor %}
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
@@ -31,6 +31,9 @@
             (function() {
                 Galleria.loadTheme('https://cdnjs.cloudflare.com/ajax/libs/galleria/1.5.7/themes/classic/galleria.classic.min.js');
                 Galleria.run('.galleria');
+                $('.galleria img').click(function() {
+                    window.location.href = $(this).attr('src').replace('.png', '');
+                });
             }());
         </script>
     </div>
