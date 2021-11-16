@@ -10,7 +10,6 @@
     <style>
     body{ background: #000 }
     .galleria{ width: 1024px; height: 1024px; }
-    .galleria-info { height: 2em; float: right}
     </style>
     <title>page</title>
 </head>
@@ -27,13 +26,13 @@
             >
         {% endfor %}
         </div>
-        <script src="/js/bootstrap.bundle.min.js"></script>
         <script>
             (function() {
                 Galleria.loadTheme('/js/galleria.classic.min.js');
                 Galleria.run('.galleria');
             }());
         </script>
+        <script src="/js/bootstrap.bundle.min.js"></script>
     </div>
 </body>
 </html>
