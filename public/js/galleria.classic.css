@@ -72,15 +72,14 @@
 .galleria-theme-classic .galleria-info {
     width: 2em;
     height: 2em;
-    border: 1px solid red;
     top: 12px;
-    right: 140px;
+    right: 145px;
     z-index: 2;
     position: absolute;
 }
 .galleria-theme-classic .galleria-info-text {
     text-align: right;
-    background-color: #000;
+    background-color: #ffffff;
     padding: 12px;
     display: none;
     /* IE7 */ zoom:1;
@@ -89,14 +88,14 @@
     text-align: right;
     font: bold 12px/1.1 arial,sans-serif;
     margin: 0;
-    color: #fff;
+    color: #000;
     margin-bottom: 7px;
 }
 .galleria-theme-classic .galleria-info-description {
     text-align: right;
     font: italic 12px/1.4 georgia,serif;
     margin: 0;
-    color: #bbb;
+    color: #000;
 }
 .galleria-theme-classic .galleria-info-close {
     width: 9px;
