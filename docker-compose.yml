@@ -91,6 +91,10 @@ services:
             - ./data/lda:/data
     simbase:
         image: "mountain/simbase:latest"
+        deploy:
+            resources:
+                limits:
+                    memory: 10g
         ports:
             - 7654:7654
         volumes:
