@@ -31,5 +31,6 @@ def index(pid, page_content):
                 vid = ri.hget('pid2vid', pid)
 
             vid = int(vid)
+            vec = ["%0.06f" % v for v in vec]
             sb.execute_command('vadd', 'page', vid, *vec)
             get_task_logger('recommender').info('finish %s' % pid)
