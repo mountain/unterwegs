@@ -47,7 +47,7 @@ def search():
 
 @application.route('/article/<string:aid>')
 def article_by(aid):
-    pids = rd.zrange('article:%s' % aid, 0, -1)
+    pids = [pid.decode('utf-8') for pid in rd.zrange('article:%s' % aid, 0, -1)]
     return render_template('article.html',
         aid=aid,
         pids=pids,
@@ -56,13 +56,17 @@ def article_by(aid):
 
 @application.route('/page/<string:pid>')
 def page_by(pid):
+    pid2aid = {}
     aid = rd.get('articleOf:page:%s' % pid).decode('utf-8')
     rlist = recommend(pid)
+    for p in rlist:
+        pid2aid[p] = rd.get('articleOf:page:%s' % p).decode('utf-8')
 
     return render_template('page.html',
         pid=pid,
         aid=aid,
         rlist=rlist,
+        pid2aid=pid2aid,
     )
 
 
