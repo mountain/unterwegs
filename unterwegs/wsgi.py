@@ -126,6 +126,11 @@ def upload():
     return 'OK'
 
 
+@application.route("/style/<path:filename>", methods=["GET"])
+def style(filename):
+    return send_from_directory(os.path.join(root_dir, 'public', 'style'), filename, cache_timeout=0)
+
+
 @application.route("/js/<path:filename>", methods=["GET"])
 def js(filename):
     return send_from_directory(os.path.join(root_dir, 'public', 'js'), filename, cache_timeout=0)
