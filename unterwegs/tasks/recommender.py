@@ -16,16 +16,6 @@ logger = get_task_logger(__name__)
 def index(pid, page_content):
     get_task_logger('recommender').info('start %s' % pid)
 
-    page_content = page_content.replace('\n', ' ').strip()
-    page_content = page_content.replace('+', ' ').strip()
-    page_content = page_content.replace('-', ' ').strip()
-    page_content = page_content.replace('?', ' ').strip()
-    page_content = page_content.replace('[', '').strip()
-    page_content = page_content.replace(']', '').strip()
-    page_content = page_content.replace('\'', '').strip()
-    page_content = page_content.replace('cid', '').strip()
-    page_content = ' '.join([wd for wd in page_content.split(' ') if len(wd) > 2])
-
     encoded = quote_plus(page_content)
     resp = requests.get('http://%s:%s/topics/%s' % (lookup("lda"), '7777', encoded))
     if resp.status_code == 200:

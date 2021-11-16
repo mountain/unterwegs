@@ -112,6 +112,16 @@ def index_page(fid, pid, idx):
     init_index()
 
     content = pdf2txt(wd.get_file(pid))
+    content = content.replace('\n', ' ').strip()
+    content = content.replace('+', ' ').strip()
+    content = content.replace('-', ' ').strip()
+    content = content.replace('?', ' ').strip()
+    content = content.replace('[', '').strip()
+    content = content.replace(']', '').strip()
+    content = content.replace('\'', '').strip()
+    content = content.replace('cid', '').strip()
+    content = ' '.join([wd for wd in page_content.split(' ') if len(wd) > 2])
+
     document = {
         'id': pid,
         'article': fid,
