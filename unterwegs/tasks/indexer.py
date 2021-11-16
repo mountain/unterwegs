@@ -120,7 +120,7 @@ def index_page(fid, pid, idx):
     content = content.replace(']', '').strip()
     content = content.replace('\'', '').strip()
     content = content.replace('cid', '').strip()
-    content = ' '.join([wd for wd in page_content.split(' ') if len(wd) > 2])
+    content = ' '.join([wd for wd in content.split(' ') if len(wd) > 2])
 
     document = {
         'id': pid,
