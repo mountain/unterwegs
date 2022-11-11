@@ -1,13 +1,13 @@
 werkzeug==0.16.0
-flask
-celery[redis]
-flask-appfactory[celery]
-flask-compress
+flask==2.2.2
+celery[redis]==5.2.7
+flask-appfactory[celery]==0.2.1
+flask-compress==1.13
 
-orjson
+orjson==3.8.1
 
-redis
-hiredis
-typesense
-pyseaweed
+redis==4.3.4
+hiredis==2.0.0
+typesense==0.14.0
+pyseaweed==2.0.0
 
