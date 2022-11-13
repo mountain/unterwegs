@@ -10,9 +10,10 @@ from scipy.special import xlogy
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-from dosnes import sinkhorn_knopp as skp
+from unterwegs.nlp.emb import sinkhorn_knopp as skp
 
-class DOSNES():
+
+class DOSNES:
     """
     Implementation of the Doubly Stochastic Neighbor Embedding on Spheres algorithm published by Yao Lu in Sep. 2016
     https://arxiv.org/abs/1609.01977
@@ -24,18 +25,18 @@ class DOSNES():
     """
 
     def __init__(self,
-                 metric = "sqeuclidean",
-                 max_iter_skp = 1e3,
-                 epsilon_skp = 1e-3,
+                 metric="sqeuclidean",
+                 max_iter_skp=1e3,
+                 epsilon_skp=1e-3,
                  momentum=0.5,
-                 final_momentum = 0.3,
-                 mom_switch_iter = 250,
-                 max_iter = 1000,
-                 learning_rate = 500,
-                 min_gain = 0.01,
-                 verbose = 0,
-                 random_state = None,
-                 verbose_freq = 10
+                 final_momentum=0.3,
+                 mom_switch_iter=250,
+                 max_iter=1000,
+                 learning_rate=500,
+                 min_gain=0.01,
+                 verbose=0,
+                 random_state=None,
+                 verbose_freq=10
                  ):
 
         """Apply Sinkhorn–Knopp Algorithm to have a Doubly Stochastic Matrix.
@@ -65,7 +66,7 @@ class DOSNES():
                      ‘sqeuclidean’,
                      ‘yule’,
                      'precomputed'.
-                If you enter pre-computed, a square matrix of (n_samples, n_samples) must be given as X.
+        If you enter pre-computed, a square matrix of (n_samples, n_samples) must be given as X.
 
         max_iter_skp : Number of maximum iteration before stopping Sinkhorn–Knopp Algorithm
 
@@ -144,14 +145,13 @@ class DOSNES():
         P[np.diag_indices_from(P)] = 0.
 
         P = (P + P.T) / 2
-        P = np.maximum( P / P.sum(), MACHINE_EPSILON)
+        P = np.maximum(P / P.sum(), MACHINE_EPSILON)
 
         const = np.sum(xlogy(P, P))
 
         ydata = 1e-4 * np.random.random(size=(n, no_dims))
-
-        y_incs = np.zeros(shape = ydata.shape)
-        gains = np.ones(shape = ydata.shape)
+        y_incs = np.zeros_like(ydata)
+        gains = np.ones_like(ydata)
 
         for iter in range(self.max_iter):
             sum_ydata = np.sum(ydata ** 2, axis=1)
@@ -164,7 +164,7 @@ class DOSNES():
 
             L = (P - Q) * num
 
-            t = np.diag( L.sum(axis=0) ) - L
+            t = np.diag(L.sum(axis=0)) - L
             y_grads = 4 * np.dot(t, ydata)
 
             inc = (np.sign(y_grads) != np.sign(y_incs))
@@ -197,7 +197,6 @@ class DOSNES():
         self.embedding = ydata / np.sqrt(np.sum(ydata ** 2, axis=1)).reshape(-1, 1)
         self._make_gif(self.filename)
 
-
     def _set_doubly_stochastic(self, D):
         """Apply Sinkhorn–Knopp Algorithm to have a Doubly Stochastic Matrix.
 
@@ -211,13 +210,12 @@ class DOSNES():
         P : array, shape (n_samples, n_samples)
             Doubly Stochastic Pairwise Distance Matrix
         """
-        P = np.exp(-D**2/2)
+        P = np.exp(-D ** 2 / 2)
         sk = skp.SinkhornKnopp(max_iter=self.max_iter_skp, epsilon=self.epsilon_skp)
         P = sk.fit(P)
         return P
 
-
-    def fit_transform(self, X, y = None, filename = "training.gif"):
+    def fit_transform(self, X, y=None, filename="training.gif"):
         """Fit X into an sperical embedded space and return that transformed
         output.
 
@@ -239,8 +237,7 @@ class DOSNES():
         self._fit(X)
         return self.embedding
 
-
-    def fit(self, X, y = None, filename = "training.gif"):
+    def fit(self, X, y=None, filename="training.gif"):
         """Fit X into an embedded space.
 
         Parameters
@@ -260,13 +257,13 @@ class DOSNES():
         if not os.path.isdir("temp"):
             os.mkdir("temp")
         fig = plt.figure()
-        ax = fig.gca(projection='3d')
+        ax = fig.add_subplot(projection='3d')
         if self.y is not None:
-            ax.scatter(self.embedding[:, 0], self.embedding[:, 1], self.embedding[:, 2], c=self.y, cmap=plt.cm.Set1)
+            ax.scatter(self.embedding[:, 0], self.embedding[:, 1], self.embedding[:, 2], c=self.y, s=self.y, cmap=plt.cm.tab10)
         else:
             ax.scatter(self.embedding[:, 0], self.embedding[:, 1], self.embedding[:, 2])
-        ax.set_xlim(-1,1)
-        ax.set_ylim(-1,1)
+        ax.set_xlim(-1, 1)
+        ax.set_ylim(-1, 1)
         ax.set_zlim(-1, 1)
         plt.title("Iteration {} - Cost {:.4f}".format(iter, cost))
         plt.savefig("temp/iter{0:03d}.png".format(iter))
@@ -278,4 +275,4 @@ class DOSNES():
         for img in glob.glob("temp/iter*.png"):
             images.append(imageio.imread(img))
         imageio.mimsave(filename, images)
-        shutil.rmtree("temp")
+        #shutil.rmtree("temp")

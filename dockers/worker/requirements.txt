@@ -7,7 +7,6 @@ wand==0.6.10
 
 cython==0.29.32
 pyemd==0.5.1
-word-mover-distance==0.0.3
 
 spacy==3.4.3
 spacy-lookups-data==1.0.3
