@@ -41,7 +41,6 @@ def nbow(bag: dict, lvoc: int, voc: list):
 
 
 def wmd(bag1: dict, bag2: dict):
-    import ot
     vec = nlp.vocab.vectors
     idx = nlp.vocab.strings
     voc = sorted(list(set(bag1.keys()).union(set(bag2.keys()))))
