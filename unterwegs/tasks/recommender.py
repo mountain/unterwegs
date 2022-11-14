@@ -24,5 +24,5 @@ def index(pid, qid):
         ri.set('wmd:%s:%s' % (qid, pid), '%0.9f' % d)
         ri.zadd('rcm:%s' % pid, {qid: d})
         ri.zadd('rcm:%s' % qid, {pid: d})
-        ri.zremrangebyrank('rcm:%s' % pid, 5, -1)
-        ri.zremrangebyrank('rcm:%s' % qid, 5, -1)
+        ri.zremrangebyrank('rcm:%s' % pid, 6, -1)
+        ri.zremrangebyrank('rcm:%s' % qid, 6, -1)
