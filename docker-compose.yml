@@ -1,10 +1,10 @@
 version: "3.8"
 services:
     base:
-        image: "unterwegs:base"
+        image: unterwegs:base
         build: ./dockers/base
     redis:
-        image: "redis:7.0.5-bullseye"
+        image: redis:7.0.5-bullseye
         ports:
             - 6379:6379
         volumes:
@@ -20,11 +20,11 @@ services:
         depends_on:
             - redis
         links:
-            - "redis:redis"
-            - "typesense:typesense"
-            - "master:master"
-            - "volume:volume"
-            - "filer:filer"
+            - redis:redis
+            - typesense:typesense
+            - master:master
+            - volume:volume
+            - filer:filer
     worker:
         build: ./dockers/worker
         volumes:
@@ -34,13 +34,13 @@ services:
         depends_on:
             - redis
         links:
-            - "redis:redis"
-            - "typesense:typesense"
-            - "master:master"
-            - "volume:volume"
-            - "filer:filer"
+            - redis:redis
+            - typesense:typesense
+            - master:master
+            - volume:volume
+            - filer:filer
     typesense:
-        image: "typesense/typesense:0.23.1"
+        image: typesense/typesense:0.23.1
         ports:
             - 8108:8108
         volumes:
@@ -49,7 +49,7 @@ services:
             TYPESENSE_API_KEY: MUzQD3ncGDBihx6YGTBeBJ4Q
             TYPESENSE_DATA_DIR: "/index"
     master:
-        image: chrislusf/seaweedfs:latest # use a remote image
+        image: chrislusf/seaweedfs:latest
         ports:
             - 9333:9333
             - 19333:19333
@@ -57,7 +57,7 @@ services:
         volumes:
             - ./data/master:/data
     volume:
-        image: chrislusf/seaweedfs:latest # use a remote image
+        image: chrislusf/seaweedfs:latest
         ports:
             - 8080:8080
             - 18080:18080
@@ -67,7 +67,7 @@ services:
         volumes:
             - ./data/volume:/data
     filer:
-        image: chrislusf/seaweedfs:latest # use a remote image
+        image: chrislusf/seaweedfs:latest
         ports:
             - 8888:8888
             - 18888:18888
@@ -79,3 +79,9 @@ services:
             - volume
         volumes:
             - ./data/filer:/data
+    tile38:
+        image: tile38/tile38:latest
+        ports:
+            - 9851:9851
+        volumes:
+            - ./data/tile38:/data
