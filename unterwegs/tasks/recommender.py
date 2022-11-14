@@ -16,7 +16,7 @@ logger = get_task_logger(__name__)
 def index(pid, qid):
     get_task_logger('recommender').info('start %s:%s' % (pid, qid))
 
-    if ri.z('wmd:%s:%s' % (pid, qid)) == 0:
+    if ri.exists('wmd:%s:%s' % (pid, qid)) == 0:
         p = rn.zrange('bow:%s' % pid, 0, -1, withscores=True)
         q = rn.zrange('bow:%s' % qid, 0, -1, withscores=True)
         d = wmd(p, q)
