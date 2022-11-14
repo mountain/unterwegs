@@ -2,7 +2,7 @@ import numpy as np
 import collections
 import spacy
 
-from scipy.spatial.distance import pdist
+from scipy.spatial.distance import pdist, squareform
 from pyemd import emd
 
 
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     import arxiv as arx
     import pyvista as pv
 
-    k = 14
+    k = 3
     texts = []
     papers = []
 
@@ -153,33 +153,26 @@ if __name__ == '__main__':
             X[i, j] = dst
             X[j, i] = dst
 
-    dsn = dosnes.DOSNES(metric='precomputed', verbose=1, max_iter=5000, learning_rate=1)
-    dsn.fit(X)
-
-    ds = pdist(dsn.embedding, metric='cosine')
-    dist = np.zeros((n, n), dtype=np.double)
-    for ix in range(n):
-        for jx in range(ix + 1, n):
-            pos = n * ix + jx - ((ix + 2) * (ix + 1)) // 2
-            dist[ix, jx] = ds[pos]
-            dist[jx, ix] = ds[pos]
+    embedding = dosnes.embed(X)
+    dist = squareform(pdist(embedding, metric='cosine'))
     for ix in range(len(papers)):
         print('=====================================================')
         print(ix, texts[ix])
         print('-----------------------------------------------------')
         for jx in np.argsort(dist[ix])[:5]:
-            print(jx, dist[ix, jx])
-            print(jx, texts[jx])
+            if ix != jx:
+                print(jx, dist[ix, jx])
+                print(jx, texts[jx])
         print('=====================================================')
 
     plotter = pv.Plotter()
-    plotter.add_mesh(pv.PolyData(dsn.embedding[0*k:1*k]), color='blue', point_size=10.0, render_points_as_spheres=True)
-    plotter.add_mesh(pv.PolyData(dsn.embedding[1*k:2*k]), color='maroon', point_size=10.0, render_points_as_spheres=True)
-    plotter.add_mesh(pv.PolyData(dsn.embedding[2*k:3*k]), color='red', point_size=10.0, render_points_as_spheres=True)
-    plotter.add_mesh(pv.PolyData(dsn.embedding[3*k:4*k]), color='yellow', point_size=10.0, render_points_as_spheres=True)
-    plotter.add_mesh(pv.PolyData(dsn.embedding[4*k:5*k]), color='green', point_size=10.0, render_points_as_spheres=True)
-    plotter.add_mesh(pv.PolyData(dsn.embedding[5*k:6*k]), color='violet', point_size=10.0, render_points_as_spheres=True)
-    plotter.add_mesh(pv.PolyData(dsn.embedding[6*k:7*k]), color='black', point_size=10.0, render_points_as_spheres=True)
+    plotter.add_mesh(pv.PolyData(embedding[0*k:1*k]), color='blue', point_size=10.0, render_points_as_spheres=True)
+    plotter.add_mesh(pv.PolyData(embedding[1*k:2*k]), color='maroon', point_size=10.0, render_points_as_spheres=True)
+    plotter.add_mesh(pv.PolyData(embedding[2*k:3*k]), color='red', point_size=10.0, render_points_as_spheres=True)
+    plotter.add_mesh(pv.PolyData(embedding[3*k:4*k]), color='yellow', point_size=10.0, render_points_as_spheres=True)
+    plotter.add_mesh(pv.PolyData(embedding[4*k:5*k]), color='green', point_size=10.0, render_points_as_spheres=True)
+    plotter.add_mesh(pv.PolyData(embedding[5*k:6*k]), color='violet', point_size=10.0, render_points_as_spheres=True)
+    plotter.add_mesh(pv.PolyData(embedding[6*k:7*k]), color='black', point_size=10.0, render_points_as_spheres=True)
     plotter.add_mesh(pv.Sphere(radius=0.98))
     plotter.show_grid()
     plotter.show()
