@@ -1,9 +1,9 @@
 import requests
 
-from urllib.parse import quote_plus
 from celery import shared_task
 from celery.utils.log import get_task_logger
-from unterwegs.utils.db import ri, sb, lookup
+from unterwegs.utils.db import rn, ri
+from unterwegs.nlp.doc import wmd
 
 
 logger = get_task_logger(__name__)
@@ -13,24 +13,16 @@ logger = get_task_logger(__name__)
     max_retries=3,
     soft_time_limit=5
 )
-def index(pid, page_content):
-    get_task_logger('recommender').info('start %s' % pid)
+def index(pid, qid):
+    get_task_logger('recommender').info('start %s:%s' % (pid, qid))
 
-    encoded = quote_plus(page_content)
-    resp = requests.get('http://%s:%s/topics/%s' % (lookup("lda"), '7777', encoded))
-    if resp.status_code == 200:
-        data = resp.json()
-        if 'topics' in data:
-            vec = data['topics']
-
-            if not ri.hexists('pid2vid', pid):
-                vid = ri.incr('serial:vid')
-                ri.hset('pid2vid', pid, vid)
-                ri.hset('vid2pid', vid, pid)
-            else:
-                vid = ri.hget('pid2vid', pid)
-
-            vid = int(vid)
-            vec = ["%0.06f" % v for v in vec]
-            sb.execute_command('vadd', 'page', vid, *vec)
-            get_task_logger('recommender').info('finish %s' % pid)
+    if ri.z('wmd:%s:%s' % (pid, qid)) == 0:
+        p = rn.zrange('bow:%s' % pid, 0, -1, withscores=True)
+        q = rn.zrange('bow:%s' % qid, 0, -1, withscores=True)
+        d = wmd(p, q)
+        ri.set('wmd:%s:%s' % (pid, qid), '%0.9f' % d)
+        ri.set('wmd:%s:%s' % (qid, pid), '%0.9f' % d)
+        ri.zadd('rcm:%s' % pid, {qid: d})
+        ri.zadd('rcm:%s' % qid, {pid: d})
+        ri.zremrangebyrank('rcm:%s' % pid, 5, -1)
+        ri.zremrangebyrank('rcm:%s' % qid, 5, -1)

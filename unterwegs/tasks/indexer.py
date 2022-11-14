@@ -2,7 +2,6 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 
 import unterwegs.tasks.analyzer as anlzr
-import unterwegs.tasks.recommender as rcmdr
 
 from unterwegs.utils.db import wd, ts
 
@@ -131,7 +130,6 @@ def index_page(fid, pid, idx):
     }
 
     ts.collections['pages'].documents.create(document)
-    rcmdr.index.delay(pid, content)
     anlzr.analyze_bow.delay(pid)
 
     return fid, pid, idx
