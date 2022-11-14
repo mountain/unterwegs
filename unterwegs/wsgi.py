@@ -8,7 +8,7 @@ import unterwegs.tasks.uploader as upldr
 from flask import Response, request, render_template, send_from_directory, url_for, redirect
 from uuid import uuid5
 from .app import create_app
-from unterwegs.utils.db import wd, rd, ts, rn
+from unterwegs.utils.db import wd, rd
 from unterwegs.utils.pages import search_result, coocurrence_nodes, coocurrence_links, frequency_of, recommend
 
 
