@@ -35,7 +35,7 @@ def bow(text: str):
 def nbow(bag: dict, lvoc: int, voc: list):
     d = np.zeros(lvoc, dtype=np.double)
     for ix, tm in enumerate(voc):
-        if tm in bag and ' ' not in tm:
+        if tm in bag:
             d[ix] = bag[tm]
     return d / d.sum()
 
@@ -46,17 +46,16 @@ def wmd(bag1: dict, bag2: dict):
     voc = sorted(list(set(bag1.keys()).union(set(bag2.keys()))))
     lvoc = len(voc)
 
+    def norm(t):
+        h = idx[t]
+        r = vec.key2row[h]
+        return np.array(vec.data[r] / np.linalg.norm(vec.data[r]))
+
     dmatrix = np.zeros((lvoc, lvoc), dtype=np.double)
     for ix, t1 in enumerate(voc):
         for jx, t2 in enumerate(voc):
-            h1 = idx[t1]
-            h2 = idx[t2]
-            if h1 in vec.key2row and h2 in vec.key2row:
-                r1 = vec.key2row[h1]
-                r2 = vec.key2row[h2]
-                n1 = vec.data[r1] / np.linalg.norm(vec.data[r1])
-                n2 = vec.data[r2] / np.linalg.norm(vec.data[r1])
-                dst = np.sum(n1 * n2)
+            if t1 in idx and idx[t1] in vec.key2row and t2 in idx and idx[t2] in vec.key2row:
+                dst = np.sum(norm(t1) * norm(t2))
                 dmatrix[ix, jx] = dst
                 dmatrix[jx, ix] = dst
 
@@ -70,7 +69,7 @@ if __name__ == '__main__':
     import arxiv as arx
     import pyvista as pv
 
-    k = 3
+    k = 14
     texts = []
     papers = []
 

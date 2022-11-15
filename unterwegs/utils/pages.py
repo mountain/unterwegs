@@ -117,7 +117,7 @@ def recommend(pid):
     if not ri.exist('rcm:%s' % pid):
         result = []
     else:
-        result = ri.zrange('rcm:%s' % pid, 0, 6)
+        result = ri.zrange('rcm:%s' % pid, 0, -1)
 
     result = [page_id.decode('utf-8') for page_id in result[:6]]
     return list(result)
