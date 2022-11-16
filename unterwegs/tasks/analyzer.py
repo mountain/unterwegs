@@ -21,5 +21,7 @@ def analyze_bow(pid):
         if qid != pid:
             rcmdr.index.delay(pid, qid)
 
+    rcmdr.embed.delay()
+
     return pid
 

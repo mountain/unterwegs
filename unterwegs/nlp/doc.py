@@ -69,7 +69,7 @@ if __name__ == '__main__':
     import arxiv as arx
     import pyvista as pv
 
-    k = 14
+    k = 3
     texts = []
     papers = []
 
@@ -151,6 +151,16 @@ if __name__ == '__main__':
             print(i, j, dst)
             X[i, j] = dst
             X[j, i] = dst
+
+    for ix in range(len(papers)):
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print(ix, texts[ix])
+        print('-----------------------------------------------------')
+        for jx in np.argsort(X[ix])[:5]:
+            if ix != jx:
+                print(jx, X[ix, jx])
+                print(jx, texts[jx])
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++')
 
     embedding = dosnes.embed(X)
     dist = squareform(pdist(embedding, metric='cosine'))
