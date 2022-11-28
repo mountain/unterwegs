@@ -33,7 +33,7 @@ def bow(text: str):
 
 
 def nbow(bag: dict, lvoc: int, voc: list):
-    d = np.zeros(lvoc, dtype=np.double)
+    d = np.zeros(lvoc, dtype=np.float64)
     for ix, tm in enumerate(voc):
         if tm in bag:
             d[ix] = bag[tm]
@@ -46,16 +46,18 @@ def wmd(bag1: dict, bag2: dict):
     voc = sorted(list(set(bag1.keys()).union(set(bag2.keys()))))
     lvoc = len(voc)
 
-    def norm(t):
+    def normalzie(t):
         h = idx[t]
         r = vec.key2row[h]
-        return np.array(vec.data[r] / np.linalg.norm(vec.data[r]))
+        return np.array(vec.data[r]) / np.linalg.norm(vec.data[r])
 
     dmatrix = np.zeros((lvoc, lvoc), dtype=np.double)
     for ix, t1 in enumerate(voc):
         for jx, t2 in enumerate(voc):
             if t1 in idx and idx[t1] in vec.key2row and t2 in idx and idx[t2] in vec.key2row:
-                dst = np.sum(norm(t1) * norm(t2))
+                prd = np.sum(normalzie(t1) * normalzie(t2))
+                prd = (prd > 1) * 1 - (prd < -1) * 1 + prd * (prd < 1) * (prd > -1)
+                dst = np.arccos(prd) / np.pi
                 dmatrix[ix, jx] = dst
                 dmatrix[jx, ix] = dst
 
@@ -66,12 +68,82 @@ def wmd(bag1: dict, bag2: dict):
 
 if __name__ == '__main__':
     import unterwegs.nlp.emb.dosnes as dosnes
+    import arxiv as arx
     import pyvista as pv
-    import json
 
-    k = 3
+    k = 10
     texts = []
     papers = []
+
+    search = arx.Search(
+        query="entanglement",
+        max_results=k,
+        sort_by=arx.SortCriterion.Relevance
+    )
+    for result in search.results():
+        print(result.entry_id)
+        texts.append("%s; %s; %s; %s" % (result.title, result.authors, result.summary, result.categories))
+        papers.append(bow(texts[-1]))
+
+    search = arx.Search(
+        query="sheaves",
+        max_results=k,
+        sort_by=arx.SortCriterion.Relevance
+    )
+    for result in search.results():
+        print(result.entry_id)
+        texts.append("%s; %s; %s; %s" % (result.title, result.authors, result.summary, result.categories))
+        papers.append(bow(texts[-1]))
+
+    search = arx.Search(
+        query="language model",
+        max_results=k,
+        sort_by=arx.SortCriterion.Relevance
+    )
+    for result in search.results():
+        print(result.entry_id)
+        texts.append("%s; %s; %s; %s" % (result.title, result.authors, result.summary, result.categories))
+        papers.append(bow(texts[-1]))
+
+    search = arx.Search(
+        query="fisher information",
+        max_results=k,
+        sort_by=arx.SortCriterion.Relevance
+    )
+    for result in search.results():
+        print(result.entry_id)
+        texts.append("%s; %s; %s; %s" % (result.title, result.authors, result.summary, result.categories))
+        papers.append(bow(texts[-1]))
+
+    search = arx.Search(
+        query="phylogenetics",
+        max_results=k,
+        sort_by=arx.SortCriterion.Relevance
+    )
+    for result in search.results():
+        print(result.entry_id)
+        texts.append("%s; %s; %s; %s" % (result.title, result.authors, result.summary, result.categories))
+        papers.append(bow(texts[-1]))
+
+    search = arx.Search(
+        query="poverty",
+        max_results=k,
+        sort_by=arx.SortCriterion.Relevance
+    )
+    for result in search.results():
+        print(result.entry_id)
+        texts.append("%s; %s; %s; %s" % (result.title, result.authors, result.summary, result.categories))
+        papers.append(bow(texts[-1]))
+
+    search = arx.Search(
+        query="parser",
+        max_results=k,
+        sort_by=arx.SortCriterion.Relevance
+    )
+    for result in search.results():
+        print(result.entry_id)
+        texts.append("%s; %s; %s; %s" % (result.title, result.authors, result.summary, result.categories))
+        papers.append(bow(texts[-1]))
 
     n = len(papers)
     X = np.zeros((n, n))
@@ -82,9 +154,27 @@ if __name__ == '__main__':
             X[i, j] = dst
             X[j, i] = dst
 
-    np.save('distance.npy', X)
+    for ix in range(len(papers)):
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print(ix, texts[ix])
+        print('-----------------------------------------------------')
+        for jx in np.argsort(X[ix])[:5]:
+            if ix != jx:
+                print(jx, X[ix, jx])
+                print(jx, texts[jx])
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++')
 
     embedding = dosnes.embed(X)
+    dist = squareform(pdist(embedding, metric='cosine'))
+    for ix in range(len(papers)):
+        print('=====================================================')
+        print(ix, texts[ix])
+        print('-----------------------------------------------------')
+        for jx in np.argsort(dist[ix])[:5]:
+            if ix != jx:
+                print(jx, dist[ix, jx])
+                print(jx, texts[jx])
+        print('=====================================================')
 
     plotter = pv.Plotter()
     plotter.add_mesh(pv.PolyData(embedding[0*k:1*k]), color='blue', point_size=10.0, render_points_as_spheres=True)
