@@ -30,7 +30,7 @@ min_gain = 0.01        # value used to clip negative gains (must be > 0)
 random_state = None    # random State used to generate the initial y matrix
 verbose_freq = 10      # number of iterations between every print of the cost function
 
-np.random.seed(random_state)
+np.random.seed(0)
 MACHINE_EPSILON = np.finfo(np.double).eps
 sk = skp.SinkhornKnopp(max_iter=max_iter_skp, epsilon=epsilon_skp)
 

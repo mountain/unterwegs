@@ -66,82 +66,12 @@ def wmd(bag1: dict, bag2: dict):
 
 if __name__ == '__main__':
     import unterwegs.nlp.emb.dosnes as dosnes
-    import arxiv as arx
     import pyvista as pv
+    import json
 
     k = 3
     texts = []
     papers = []
-
-    search = arx.Search(
-        query="entanglement",
-        max_results=k,
-        sort_by=arx.SortCriterion.Relevance
-    )
-    for result in search.results():
-        print(result.entry_id)
-        texts.append("%s; %s; %s; %s" % (result.title, result.authors, result.summary, result.categories))
-        papers.append(bow(texts[-1]))
-
-    search = arx.Search(
-        query="sheaves",
-        max_results=k,
-        sort_by=arx.SortCriterion.Relevance
-    )
-    for result in search.results():
-        print(result.entry_id)
-        texts.append("%s; %s; %s; %s" % (result.title, result.authors, result.summary, result.categories))
-        papers.append(bow(texts[-1]))
-
-    search = arx.Search(
-        query="language model",
-        max_results=k,
-        sort_by=arx.SortCriterion.Relevance
-    )
-    for result in search.results():
-        print(result.entry_id)
-        texts.append("%s; %s; %s; %s" % (result.title, result.authors, result.summary, result.categories))
-        papers.append(bow(texts[-1]))
-
-    search = arx.Search(
-        query="fisher information",
-        max_results=k,
-        sort_by=arx.SortCriterion.Relevance
-    )
-    for result in search.results():
-        print(result.entry_id)
-        texts.append("%s; %s; %s; %s" % (result.title, result.authors, result.summary, result.categories))
-        papers.append(bow(texts[-1]))
-
-    search = arx.Search(
-        query="phylogenetics",
-        max_results=k,
-        sort_by=arx.SortCriterion.Relevance
-    )
-    for result in search.results():
-        print(result.entry_id)
-        texts.append("%s; %s; %s; %s" % (result.title, result.authors, result.summary, result.categories))
-        papers.append(bow(texts[-1]))
-
-    search = arx.Search(
-        query="poverty",
-        max_results=k,
-        sort_by=arx.SortCriterion.Relevance
-    )
-    for result in search.results():
-        print(result.entry_id)
-        texts.append("%s; %s; %s; %s" % (result.title, result.authors, result.summary, result.categories))
-        papers.append(bow(texts[-1]))
-
-    search = arx.Search(
-        query="parser",
-        max_results=k,
-        sort_by=arx.SortCriterion.Relevance
-    )
-    for result in search.results():
-        print(result.entry_id)
-        texts.append("%s; %s; %s; %s" % (result.title, result.authors, result.summary, result.categories))
-        papers.append(bow(texts[-1]))
 
     n = len(papers)
     X = np.zeros((n, n))
@@ -152,27 +82,9 @@ if __name__ == '__main__':
             X[i, j] = dst
             X[j, i] = dst
 
-    for ix in range(len(papers)):
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        print(ix, texts[ix])
-        print('-----------------------------------------------------')
-        for jx in np.argsort(X[ix])[:5]:
-            if ix != jx:
-                print(jx, X[ix, jx])
-                print(jx, texts[jx])
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++')
+    np.save('distance.npy', X)
 
     embedding = dosnes.embed(X)
-    dist = squareform(pdist(embedding, metric='cosine'))
-    for ix in range(len(papers)):
-        print('=====================================================')
-        print(ix, texts[ix])
-        print('-----------------------------------------------------')
-        for jx in np.argsort(dist[ix])[:5]:
-            if ix != jx:
-                print(jx, dist[ix, jx])
-                print(jx, texts[jx])
-        print('=====================================================')
 
     plotter = pv.Plotter()
     plotter.add_mesh(pv.PolyData(embedding[0*k:1*k]), color='blue', point_size=10.0, render_points_as_spheres=True)
