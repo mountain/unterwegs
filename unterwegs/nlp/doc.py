@@ -1,6 +1,7 @@
 import numpy as np
 import collections
 import spacy
+import functools
 
 from scipy.spatial.distance import pdist, squareform
 from pyemd import emd
@@ -9,7 +10,7 @@ from pyemd import emd
 nlp = spacy.load("en_core_web_md")
 
 
-def bow(text: str):
+def bow(text: str, flag=True):
     bag = collections.OrderedDict()
     d = nlp(text.replace('\n', ' ').strip())
 
@@ -21,13 +22,13 @@ def bow(text: str):
                 if txt not in bag:
                     bag[txt] = 0
                 bag[txt] += 1
-
-    for nc in d.noun_chunks:
-        chunk = nc.text.strip()
-        if len(chunk.split(' ')) > 1:
-            if chunk not in bag:
-                bag[chunk] = 0
-            bag[chunk] += 1
+    if flag:
+        for nc in d.noun_chunks:
+            chunk = nc.text.strip()
+            if len(chunk.split(' ')) > 1:
+                if chunk not in bag:
+                    bag[chunk] = 0
+                bag[chunk] += 1
 
     return bag
 
@@ -46,6 +47,7 @@ def wmd(bag1: dict, bag2: dict):
     voc = sorted(list(set(bag1.keys()).union(set(bag2.keys()))))
     lvoc = len(voc)
 
+    @functools.cache
     def normalzie(t):
         h = idx[t]
         r = vec.key2row[h]
